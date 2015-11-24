@@ -5,7 +5,7 @@
       <paths name="django.ad.cyriusg.se">
         <serverdata>
           <mappings>
-            <mapping deploy="/networkmapper" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/networkscanner" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
