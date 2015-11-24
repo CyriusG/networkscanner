@@ -1,0 +1,19 @@
+<h1>Add new site.</h1>
+
+{{ site_user }}
+
+{% if sites_in_db %}
+    {% for sites in sites_in_db %}
+        {{ sites.name }} <br />
+    {% endfor %}
+{% else %}
+    No sites are in the database.
+{% endif %}
+
+<br />
+<br />
+
+<form method="POST" action="{% url 'scan:addsite' %}">{% csrf_token %}
+    {{ site_form.as_p }}
+    <input type="submit" value="Add site" name="add_site">
+</form>

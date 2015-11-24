@@ -1,0 +1,40 @@
+<H1>Scan network.</H1>
+
+{% if user.is_authenticated %}
+    {{ selected_site }}
+{% endif %}
+
+{% if sites_exists %}
+
+    <form method="POST" action="{% url 'scan:updatesite' %}">{% csrf_token %}
+        {{ select_site_form }}
+        <input type="submit" value="Change site" name="select_site">
+    </form>
+
+    {{ network_form.non_field_errors }}
+    <form method="POST" action="{% url 'scan:index' %}">{% csrf_token %}
+        <input type="hidden" value="{{ request.user.siteuser.current_site.id }}" name="site" />
+        <div class="fieldWrapper">
+            {{ network_form.network_address.errors }}
+            <label for="{{ network_form.network_address.id_for_label }}">Network:</label>
+            {{ network_form.network_address }}
+        </div>
+        <div class="fieldWrapper">
+            {{ network_form.subnet_bits.errors }}
+            <label for="{{ network_form.subnet_bits.id_for_label }}">Subnet bits::</label>
+            {{ network_form.subnet_bits }}
+        </div>
+        <input type="submit" value="Add network" name="add_network">
+    </form>
+
+    {% if task_status %}
+        <form method="POST" action="{% url 'scan:scan' %}">{% csrf_token %}
+            {{ scan_form.as_p }}
+            <input type="submit" value="Scan" name="scan_network">
+        </form>
+    {% else %}
+        Scan is currently in progress.
+    {% endif %}
+{% else %}
+    You have to add a site before scanning a network.
+{% endif %}
