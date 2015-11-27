@@ -40,12 +40,17 @@ CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
 # Application definition
 
 INSTALLED_APPS = (
+    # Django applications
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Third-party applications
+    'registration',
+    # Our applications
     'scan',
 )
 
@@ -119,3 +124,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static', 'our_static'),
 )
+
+# Django Registration Redux Settings
+REDIRECT_URL_LOGIN = '/'
+SITE_ID = 1

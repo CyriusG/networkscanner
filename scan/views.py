@@ -13,7 +13,7 @@ def index(request):
 
     list_of_sites = Site.objects.all()
     task_status = True
-    select_site_form = None
+    select_site_form = SelectSiteForm()
     network_form = None
     scan_form = None
     sites_exists = True
@@ -32,7 +32,6 @@ def index(request):
     try:
         network_form = NetworkForm()
         scan_form = ScanForm(request.user.siteuser.current_site)
-        select_site_form = SelectSiteForm()
     except Siteuser.DoesNotExist:
         sites_exists = False
 
@@ -87,6 +86,12 @@ def updatesite(request):
             data = select_site_form.cleaned_data
             site = data['current_site']
             selected_site = Site.objects.get(name=site)
+            try:
+                Siteuser.objects.get(user=request.user)
+            except Siteuser.DoesNotExist:
+                site = Site.objects.get(name=site)
+                site_user = Siteuser(user=request.user, current_site=site)
+                site_user.save()
             current_user = Siteuser.objects.get(user=request.user)
             current_user.current_site = selected_site
             current_user.save()

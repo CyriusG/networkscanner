@@ -58,3 +58,6 @@ target/
 
 # PyCharm project files
 .idea/
+
+# Folders not related to project
+static/static_root

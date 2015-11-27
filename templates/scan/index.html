@@ -1,18 +1,16 @@
 <H1>Scan network.</H1>
 
-{% if user.is_authenticated %}
-    {{ selected_site }}
-{% endif %}
+<h3>Selected site: {{ selected_site }}</h3>
+
+<form method="POST" action="{% url 'scan:updatesite' %}">{% csrf_token %}
+    {{ select_site_form }}
+    <input type="submit" value="Change site" name="select_site">
+</form>
 
 {% if sites_exists %}
 
-    <form method="POST" action="{% url 'scan:updatesite' %}">{% csrf_token %}
-        {{ select_site_form }}
-        <input type="submit" value="Change site" name="select_site">
-    </form>
-
     {{ network_form.non_field_errors }}
-    <form method="POST" action="{% url 'scan:index' %}">{% csrf_token %}
+    <form method="POST" action="{% url 'scan:addnetwork' %}">{% csrf_token %}
         <input type="hidden" value="{{ request.user.siteuser.current_site.id }}" name="site" />
         <div class="fieldWrapper">
             {{ network_form.network_address.errors }}

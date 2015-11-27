@@ -28,7 +28,7 @@ def scanNetwork(self, network, site):
                 if q_hostname:
                     hostname = q.hostname.get("name")
                 else:
-                    hostname = ""
+                    hostname = " "
                 services = []
                 q_port = q.findAll("port")
                 if q_port:
@@ -40,10 +40,9 @@ def scanNetwork(self, network, site):
                         service.append(z.find("service").get("name"))
                         services.append(service)
                 if site_object and ip and network_object and hostname:
+                    host = Host(site=site_object, ip=ip, network=network_object, dnsName=hostname)
+                    host.save()
                     for j, item in enumerate(services):
-                        host = Host(site=site_object, ip=ip, network=network_object, dnsName=hostname)
-                        host.save()
-
                         query = Service(host=host, portID=services[j][0], protocol=services[j][1], state=services[j][2], serviceName=services[j][3])
                         query.save()
 
