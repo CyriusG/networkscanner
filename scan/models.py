@@ -21,11 +21,11 @@ class Network(models.Model):
     class Meta:
         unique_together = ('site', 'network_address', 'subnet_bits')
     def __unicode__(self):
-        return self.network_address + "/" + str(self.subnet_bits)
+        return 'id:' + str(self.id) + ': ' + self.network_address + "/" + str(self.subnet_bits)
 
 class Scan(models.Model):
     site = models.ForeignKey(Site, null=False, blank=False)
-    networks = models.ForeignKey(Network)
+    networks = models.CharField(max_length=200)
     taskID = models.CharField(max_length=200)
     ready = models.BinaryField()
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
@@ -36,7 +36,7 @@ class Scan(models.Model):
 class Host(models.Model):
     site = models.ForeignKey(Site)
     ip = models.CharField(max_length=15)
-    network = models.CharField(max_length=19)
+    network = models.CharField(max_length=200)
     dnsName = models.CharField(max_length=200)
     def __unicode__(self):
 		return 'IP: ' + self.ip + ' Network: ' + self.network + ' Hostname: ' + self.dnsName

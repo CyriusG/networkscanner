@@ -7,14 +7,14 @@ class NetworkForm(forms.ModelForm):
         model = Network
         fields = ['site', 'network_address', 'subnet_bits']
 
-class ScanForm(forms.ModelForm):
-    def __init__(self, site, *args, **kwargs):
-        super(ScanForm, self).__init__(*args, **kwargs)
-        self.fields['networks'].queryset = Network.objects.filter(site=site)
-
-    class Meta:
-        model = Scan
-        fields = ['networks']
+# class ScanForm(forms.ModelForm):
+#     # def __init__(self, site, *args, **kwargs):
+#     #     super(ScanForm, self).__init__(*args, **kwargs)
+#     #     self.fields['networks'].queryset = Network.objects.filter(site=site)
+#
+#     class Meta:
+#         model = Scan
+#         fields = ['networks']
 
 class SiteForm(forms.ModelForm):
     class Meta:

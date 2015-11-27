@@ -26,10 +26,25 @@
     </form>
 
     {% if task_status %}
+
         <form method="POST" action="{% url 'scan:scan' %}">{% csrf_token %}
-            {{ scan_form.as_p }}
-            <input type="submit" value="Scan" name="scan_network">
+            <input type="hidden" value="{{ request.user.siteuser.current_site.id }}" name="site" />
+            <div class="fieldWrapper">
+                <select name="network_selected">
+                    {% for network in networks_available %}
+                        <option value="{{ network.id }}">{{ network.network_address }}/{{ network.subnet_bits }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="fieldWrapper">
+                <input type="submit" value="Scan" name="scan_network">
+            </div>
         </form>
+{#        <form method="POST" action="{% url 'scan:scan' %}">{% csrf_token %}#}
+{#            {{ scan_form.as_p }}#}
+{#            <input type="submit" value="Scan" name="scan_network">#}
+{#        </form>#}
     {% else %}
         Scan is currently in progress.
     {% endif %}

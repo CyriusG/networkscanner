@@ -9,14 +9,14 @@ app = Celery('tasks', backend='amqp', broke='amqp://guest@localhost//')
 @app.task(bind=True)
 def scanNetwork(self, network, site):
 
-    network = str(network)
-
-    network_address, subnet_bits = network.split("/")
+    network = Network.objects.get(id=network)
+    network_address = network.network_address
+    subnet_bits = network.subnet_bits
+    network_nmap = network_address + "/" + subnet_bits
 
     site_object = Site.objects.get(name=site)
-    network_object = Network.objects.get(site=site_object, network_address=network_address, subnet_bits=subnet_bits)
 
-    nmap_output = commands.getoutput("nmap -oX - %s" % network)
+    nmap_output = commands.getoutput("nmap -oX - %s" % network_nmap)
     xml_soup = BeautifulSoup(nmap_output)
     if xml_soup:
         for q in xml_soup.findAll("host"):
@@ -39,8 +39,8 @@ def scanNetwork(self, network, site):
                         service.append(z.find("state").get("state"))
                         service.append(z.find("service").get("name"))
                         services.append(service)
-                if site_object and ip and network_object and hostname:
-                    host = Host(site=site_object, ip=ip, network=network_object, dnsName=hostname)
+                if site_object and ip and network and hostname:
+                    host = Host(site=site_object, ip=ip, network=network, dnsName=hostname)
                     host.save()
                     for j, item in enumerate(services):
                         query = Service(host=host, portID=services[j][0], protocol=services[j][1], state=services[j][2], serviceName=services[j][3])
