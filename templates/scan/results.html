@@ -1,0 +1,15 @@
+<h1>Discovered hosts and services</h1>
+
+{% if hosts_in_db %}
+    {% for hosts in hosts_in_db %}
+        {{ hosts.id }}:{{ hosts.ip }} {% if hosts.dnsName != " " %} ({{ hosts.dnsName }}) {% endif %}  <br />
+        {% for services in services_in_db  %}
+            {% if services.host == hosts %}
+                {{ services.portID }}({{ services.serviceName }})<br />
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    <br />
+{% else %}
+    No hosts are in the database.
+{% endif %}

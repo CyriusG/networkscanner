@@ -5,7 +5,7 @@ from django.template import RequestContext
 from celery.result import AsyncResult
 
 from .forms import NetworkForm, SelectSiteForm, SiteForm
-from .models import Scan, Site, Siteuser, Network
+from .models import Scan, Site, Siteuser, Network, Host, Service
 from .tasks import scanNetwork
 
 @login_required
@@ -15,7 +15,6 @@ def index(request):
     task_status = True
     select_site_form = SelectSiteForm()
     network_form = None
-    # scan_form = None
     sites_exists = True
 
     try:
@@ -31,13 +30,12 @@ def index(request):
 
     try:
         network_form = NetworkForm()
-        # scan_form = ScanForm(request.user.siteuser.current_site)
     except Siteuser.DoesNotExist:
         sites_exists = False
 
     try:
         networks_available = Network.objects.all().filter(site=request.user.siteuser.current_site)
-    except Network.DoesNotExist:
+    except Siteuser.DoesNotExist:
         networks_available = None
 
     context = RequestContext(request, {
@@ -45,7 +43,6 @@ def index(request):
         'selected_site': selected_site,
         'select_site_form': select_site_form,
         'network_form': network_form,
-        # 'scan_form': scan_form,
         'networks_available': networks_available,
         'task_status': task_status,
         'sites_exists': sites_exists,
@@ -66,6 +63,19 @@ def sites(request):
         'site_form': site_form,
     })
     return render(request, 'scan/sites.html', context)
+
+@login_required
+def results(request):
+
+    hosts = Host.objects.all().filter(site=request.user.siteuser.current_site)
+    services = Service.objects.all().filter(host=hosts)
+
+    context = RequestContext(request, {
+        'hosts_in_db': hosts,
+        'services_in_db': services,
+    })
+
+    return render(request, 'scan/results.html', context)
 
 @login_required
 def addsite(request):
@@ -125,10 +135,11 @@ def scan(request):
     except Scan.DoesNotExist:
         task_status = True
 
-    if request.method == 'POST' and 'scan_network' in request.POST:
-        network_selected = request.POST['network_selected']
-        site = request.user.siteuser.current_site
-        task = scanNetwork.delay(network_selected, site)
-        query = Scan(site=site,networks=network_selected, taskID=task.id, ready=task.ready())
-        query.save()
+    if task_status:
+        if request.method == 'POST' and 'scan_network' in request.POST:
+            network_selected = request.POST['network_selected']
+            site = request.user.siteuser.current_site
+            task = scanNetwork.delay(network_selected, site)
+            query = Scan(site=site,networks=network_selected, taskID=task.id, ready=task.ready())
+            query.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
