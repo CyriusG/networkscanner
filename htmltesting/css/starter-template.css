@@ -1,0 +1,75 @@
+body {
+  padding-top: 50px;
+  background-color: #E8E8E8;
+}
+
+.fa-info {
+	color: #1C87C9;
+}
+
+.fa-check {
+	color: white;
+}
+
+.fa-times {
+	color: black;
+}
+
+.fa-times:hover {
+	color: red;
+}
+
+.fa-plus {
+	color: white;
+}
+
+
+.left-align{
+	text-align: left;
+}
+
+.center-align{
+	text-align: center;
+}
+
+.right-align{
+	text-align: right;
+}
+
+.link-color {
+	color: #3783C4 !important;
+}
+
+.link-color:hover {
+	color: #45A9FF !important;
+	text-decoration: none;
+}
+
+.label-default a , .label-default a:hover {
+	color: white;
+	text-decoration: none;
+}
+
+.label-default:hover {
+	background-color: #555555;
+}
+
+.content {
+  padding: 10px 15px;
+  background-color: #FFFFFF;
+  border-radius: 0 0 5px 5px;
+}
+
+.networks {
+	padding: 10px;
+	margin-top: 10px;
+}
+
+.add-network-address {
+	width: 150px !important;
+}
+
+.add-network-subnet {
+	width: 70px !important;
+	border-radius-left: 0 !important; 
+}
