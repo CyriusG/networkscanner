@@ -23,7 +23,6 @@ body {
 	color: white;
 }
 
-
 .left-align{
 	text-align: left;
 }
@@ -35,6 +34,7 @@ body {
 .right-align{
 	text-align: right;
 }
+
 
 .link-color {
 	color: #3783C4 !important;
@@ -72,4 +72,23 @@ body {
 .add-network-subnet {
 	width: 70px !important;
 	border-radius-left: 0 !important; 
+}
+
+.no-height{
+	padding: 0 !important;
+	border: 0 !important;
+}
+.table-striped-third > tbody > tr:nth-child(4n - 3) > td, .table-striped > tbody > tr:nth-child(4n - 3) > th {
+   background-color: #FFFFFF;
+}
+
+.table-striped-fourth > tbody > tr:nth-child(4n) > td, .table-striped > tbody > tr:nth-child(4n) > th {
+   background-color: #f9f9f9;
+}
+
+.well {
+	margin-top: 10px;
+	background: 0;
+	border: 0;
+	border-radius: 0;
 }

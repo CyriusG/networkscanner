@@ -53,28 +53,30 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-			<li><a href="#about">Overview</a></li>
-            <li class="active"><a href="#">Scan</a></li>
+			<li class="active"><a href="#about">Overview</a></li>
+            <li><a href="#">Scan</a></li>
             <li><a href="#about">Results</a></li>
           </ul>
 		
-        <div class="btn-group pull-right">
-          <button type="button" class="btn btn-primary navbar-btn btn-sm" title="Currently selected site">CNAP</button>
-          <button type="button" class="btn btn-primary dropdown-toggle navbar-btn btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Change site">
-            <span class="caret"></span>
-            <span class="sr-only">Toggle Dropdown</span>
-          </button>
-          <ul class="dropdown-menu">
-            <li><a href="#">New site</a></li>
-            <li role="separator" class="divider"></li>
-            <li class="disabled"><a href="#">CNAP</a></li>
-            <li><a href="#">Lab</a></li>
-            <li><a href="#">Robin</a></li>
-            <li><a href="#">Joacim</a></li>
-          </ul>
-        </div>
-
+		
 		<div class="btn-toolbar">
+
+            <div class="btn-group pull-right">
+              <button type="button" class="btn btn-primary navbar-btn btn-sm" title="Currently selected site">CNAP</button>
+              <button type="button" class="btn btn-primary dropdown-toggle navbar-btn btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Change site">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">New site</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="disabled"><a href="#">CNAP</a></li>
+                <li><a href="#">Lab</a></li>
+                <li><a href="#">Robin</a></li>
+                <li><a href="#">Joacim</a></li>
+              </ul>
+            </div>
+
 			<div class="btn-group pull-right">
 				<p class="navbar-text">
 					joacim | <a class="navbar-link link-color" href="#">Sign out</a>
@@ -86,73 +88,52 @@
     </nav>
 
     <div class="container">
-		
 		<div class="content">
-
-			<!-- Modal -->
-			<div class="modal fade" id="add-network" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-			  <div class="modal-dialog" role="document">
-				<div class="modal-content">
-				  <div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Add new network</h4>
-				  </div>
-				  <div class="modal-body">
-					<div class="row">
-						<div class="col-xs-12">
-							<p>Enter a network in the slash notation format.</p>
-							<form action="" class="form form-inline">
-								<div class="form-group">
-									<div class="input-group">
-										<input type="text" class="form-control add-network-address input-sm" placeholder="Network address" maxlength="15" required autofocus>
-										<span class="input-group-addon input-sm" style="border-left: 0; border-right: 0;">/</span>
-										<input type="text" class="form-control add-network-subnet center-align input-sm" placeholder="0-32" maxlength="2" required>
-									</div>
-								</div>
-						</div>
-					</div>
-				  </div>
-				  <div class="modal-footer">
-					<button type="submit" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button>
-					</form>
-					<button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
-					</form>
-				  </div>
-				</div>
-			  </div>
-			</div>
-			
 			<div class="networks">
 				<div class="row">
-					<div class="col-xs-12">
-                        <h4>Networks</h4>
-                        <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i>Scan selected networks</button></a>
-                        <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="Add a site before starting a scan."><i class="fa fa-search"></i>Scan selected networks</button></a>
-                        <a href="#"><button type="submit" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="This might take a few minutes."><i class="fa fa-search"></i>Scan selected networks</button></a>
-                        <button class="btn btn-success btn-xs disabled" data-toggle="tooltip" data-placement="top" title="Add a site before adding networks."><i class="fa fa-plus"></i> Add network</button>
-                        <a href="#" data-toggle="modal" data-target="#add-network"><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button></a>
+					<div class="col-xs-6">
+						<div class="row">
+							<h4>Latest networks</h4>
+						</div>
 						<form action="" class="form form-inline">
 							<table class="table table-striped">
 								<thead>
 									<tr>
-										<span class="col-xs-1">
-											<th class="center-align"><input type="checkbox" class="checkbox" id="allstates"></th>
-											<th>ID</th>
-										</span>
-										<th class="col-md-2 col-sm-3">Network address</th>
-										<th class="col-xs-2">Subnet bits</th>
-										<th class="col-xs-3">Discovered hosts</th>
-										<th class="col-md-4 col-sm-3">Added</th>
+                                        <th class="col-xs-1">ID</th>
+										<th class="col-xs-2">Network</th>
+										<th class="col-xs-4">Hosts</th>
+										<th class="col-5">Added</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td class="center-align">
-											<input class="record_table" type="checkbox">
-										</td>
 										<td>1</td>
-										<td class="left-align">192.168.1.0</td>
-										<td class="left-align">24</td>
+										<td class="left-align">192.168.1.0/24</td>
+										<td class="left-align"><a href="#">5</a></td>
+										<td class="left-align">2015-11-28 15:00:00</td>
+									</tr>
+								</tbody>
+							</table>
+						</form>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="row">
+							<h4>Latest hosts</h4>
+						</div>
+                        <form action="" class="form form-inline">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+                                        <th class="col-xs-1">ID</th>
+										<th class="col-xs-2">Address</th>
+										<th class="col-xs-4">Services</th>
+										<th class="col-xs-5">Added</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>1</td>
+										<td class="left-align">192.168.1.110</td>
 										<td class="left-align"><a href="#">5</a></td>
 										<td class="left-align">2015-11-28 15:00:00</td>
 									</tr>
@@ -163,7 +144,7 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<h4>Five latest scans</h4>
+						<h4>Latest scans</h4>
 					</div>
 				</div>
 				<div class="row">
