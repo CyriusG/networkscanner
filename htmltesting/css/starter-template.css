@@ -3,23 +3,16 @@ body {
   background-color: #E8E8E8;
 }
 
+a {
+	border: none !important;
+	outline: none !important;
+}
+
 .fa-info {
 	color: #1C87C9;
 }
 
 .fa-check {
-	color: white;
-}
-
-.fa-times {
-	color: black;
-}
-
-.fa-times:hover {
-	color: red;
-}
-
-.fa-plus {
 	color: white;
 }
 
@@ -37,11 +30,11 @@ body {
 
 
 .link-color {
-	color: #3783C4 !important;
+	color: #337AB7 !important;
 }
 
 .link-color:hover {
-	color: #45A9FF !important;
+	color: #286090 !important;
 	text-decoration: none;
 }
 
@@ -78,17 +71,26 @@ body {
 	padding: 0 !important;
 	border: 0 !important;
 }
-.table-striped-third > tbody > tr:nth-child(4n - 3) > td, .table-striped > tbody > tr:nth-child(4n - 3) > th {
+.table-striped-third > tbody > tr:nth-child(4n - 1) > td, .table-striped > tbody > tr:nth-child(4n - 1) > th {
    background-color: #FFFFFF;
 }
 
 .table-striped-fourth > tbody > tr:nth-child(4n) > td, .table-striped > tbody > tr:nth-child(4n) > th {
+   background-color: #FFFFFF;
+}
+
+.table-striped-fourth > tbody > tr:nth-child(4n - 2) > td, .table-striped > tbody > tr:nth-child(4n - 2) > th {
    background-color: #f9f9f9;
 }
 
 .well {
-	margin-top: 10px;
+	margin: 0 !important;
+	padding: 5px 5px 0 5px !important;
 	background: 0;
 	border: 0;
 	border-radius: 0;
+}
+
+.table-no-background {
+	background: 0 !important;
 }
