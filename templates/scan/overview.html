@@ -1,0 +1,123 @@
+{% extends 'scan/basefiles/base.html' %}
+{% block nav_overview %}active{% endblock %}
+
+{% block content %}
+        <div class="networks">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="row">
+                        <h4>Latest networks</h4>
+                    </div>
+                    <form action="" class="form form-inline">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-1">ID</th>
+                                    <th class="col-xs-2">Network</th>
+                                    <th class="col-xs-4">Hosts</th>
+                                    <th class="col-xs-5">Added</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for network in networks_available %}
+                                    <tr>
+                                        <td>{{ network.id }}</td>
+                                        <td>{{ network.network_address }}/{{ network.subnet_bits }}</td>
+                                        <td>5</td>
+                                        <td>{{ network.timestamp|date:"Y-m-d H:i:s" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="col-xs-6">
+                    <div class="row">
+                        <h4>Latest hosts</h4>
+                    </div>
+                    <form action="" class="form form-inline">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-1">ID</th>
+                                    <th class="col-xs-2">Address</th>
+                                    <th class="col-xs-4">Services</th>
+                                    <th class="col-xs-5">Added</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for hosts in hosts_available %}
+                                    <tr>
+                                        <td>{{ hosts.id }}</td>
+                                        <td>{{ hosts.ip }}</td>
+                                        <td>5</td>
+                                        <td>{{ hosts.timestamp|date:"Y-m-d H:i:s" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4>Latest scans</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th class="col-xs-3">Task ID</th>
+                                <th class="col-xs-4">Networks</th>
+                                <span class="col-xs-5">
+                                    <th>Start time</th>
+                                    <th>Complete</th>
+                                    <th>Status</th>
+                                </span>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a class="link-color" href="#">1</a></td>
+                                <td class="left-align">29e0df39-0df4-4809-a268-26a6d3cc9eff</td>
+                                <td class="left-align">
+                                    <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                </td>
+                                <td class="left-align">2015-11-28 15:00:00</td>
+                                <td class="left-align"></td>
+                                <td class="left-align"><span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> In progress</span></td>
+                            </tr>
+                            <tr>
+                                <td><a class="link-color" href="#">1</a></td>
+                                <td class="left-align">29e0df39-0df4-4809-a268-26a6d3cc9eff</td>
+                                <td class="left-align">
+                                    <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                    <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                    <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                    <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                    <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                </td>
+                                <td class="left-align">2015-11-28 15:00:00</td>
+                                <td class="left-align">2015-11-28 15:00:30</td>
+                                <td class="left-align"><span class="label label-success"><i class="fa fa-check"></i> Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td><a class="link-color" href="#">1</a></td>
+                                <td class="left-align">29e0df39-0df4-4809-a268-26a6d3cc9eff</td>
+                                <td class="left-align">
+                                    <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                </td>
+                                <td class="left-align">2015-11-28 15:00:00</td>
+                                <td class="left-align">2015-11-28 15:00:00</td>
+                                <td class="left-align"><span class="label label-success"><i class="fa fa-check"></i> Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

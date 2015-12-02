@@ -1,0 +1,104 @@
+{% extends 'scan/basefiles/base.html' %}
+{% block content %}
+{% include 'scan/scan_addnetwork_modal.html' %}
+    <div class="networks">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Networks</h4>
+                <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i>Scan selected networks</button></a>
+                <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="Add a site before starting a scan."><i class="fa fa-search"></i>Scan selected networks</button></a>
+                <a href="#"><button type="submit" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="This might take a few minutes."><i class="fa fa-search"></i>Scan selected networks</button></a>
+                <button class="btn btn-success btn-xs disabled" data-toggle="tooltip" data-placement="top" title="Add a site before adding networks."><i class="fa fa-plus"></i> Add network</button>
+                <a href="#" data-toggle="modal" data-target="#add-network"><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button></a>
+                <form action="" class="form form-inline">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <span class="col-xs-1">
+                                    <th class="center-align"><input type="checkbox" class="checkbox" id="allstates"></th>
+                                    <th>ID</th>
+                                </span>
+                                <th class="col-md-2 col-sm-3">Network address</th>
+                                <th class="col-xs-2">Subnet bits</th>
+                                <th class="col-xs-3">Discovered hosts</th>
+                                <th class="col-md-4 col-sm-3">Added</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="center-align">
+                                    <input class="record_table" type="checkbox">
+                                </td>
+                                <td>1</td>
+                                <td class="left-align">192.168.1.0</td>
+                                <td class="left-align">24</td>
+                                <td class="left-align"><a href="#">5</a></td>
+                                <td class="left-align">2015-11-28 15:00:00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Five latest scans</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th class="col-xs-3">Task ID</th>
+                            <th class="col-xs-4">Networks</th>
+                            <span class="col-xs-5">
+                                <th>Start time</th>
+                                <th>Complete</th>
+                                <th>Status</th>
+                            </span>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a class="link-color" href="#">1</a></td>
+                            <td class="left-align">29e0df39-0df4-4809-a268-26a6d3cc9eff</td>
+                            <td class="left-align">
+                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                            </td>
+                            <td class="left-align">2015-11-28 15:00:00</td>
+                            <td class="left-align"></td>
+                            <td class="left-align"><span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> In progress</span></td>
+                        </tr>
+                        <tr>
+                            <td><a class="link-color" href="#">1</a></td>
+                            <td class="left-align">29e0df39-0df4-4809-a268-26a6d3cc9eff</td>
+                            <td class="left-align">
+                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                            </td>
+                            <td class="left-align">2015-11-28 15:00:00</td>
+                            <td class="left-align">2015-11-28 15:00:30</td>
+                            <td class="left-align"><span class="label label-success"><i class="fa fa-check"></i> Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td><a class="link-color" href="#">1</a></td>
+                            <td class="left-align">29e0df39-0df4-4809-a268-26a6d3cc9eff</td>
+                            <td class="left-align">
+                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
+                            </td>
+                            <td class="left-align">2015-11-28 15:00:00</td>
+                            <td class="left-align">2015-11-28 15:00:00</td>
+                            <td class="left-align"><span class="label label-success"><i class="fa fa-check"></i> Completed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

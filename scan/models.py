@@ -18,6 +18,7 @@ class Network(models.Model):
     site = models.ForeignKey(Site)
     network_address = models.GenericIPAddressField(blank=False, null=False)
     subnet_bits = models.CharField(max_length=2)
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     class Meta:
         unique_together = ('site', 'network_address', 'subnet_bits')
     def __unicode__(self):
@@ -38,6 +39,7 @@ class Host(models.Model):
     ip = models.CharField(max_length=15)
     network = models.CharField(max_length=200)
     dnsName = models.CharField(max_length=200)
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     def __unicode__(self):
 		return 'IP: ' + self.ip + ' Network: ' + self.network + ' Hostname: ' + self.dnsName
 

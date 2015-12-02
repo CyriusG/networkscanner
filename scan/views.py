@@ -34,9 +34,20 @@ def index(request):
         sites_exists = False
 
     try:
-        networks_available = Network.objects.all().filter(site=request.user.siteuser.current_site)
+        networks_available = Network.objects.all().order_by('id').filter(site=request.user.siteuser.current_site)
     except Siteuser.DoesNotExist:
         networks_available = None
+
+    try:
+        for network in networks_available:
+            networks_available_hosts = Host.objects.all().order_by('id').filter(network=network.id)
+    except Host.DoesNotExist:
+        networks_available_hosts = 0
+
+    try:
+        hosts_available = Host.objects.all().order_by('id').filter(site=request.user.siteuser.current_site)
+    except Siteuser.DoesNotExist:
+        hosts_available = None
 
     context = RequestContext(request, {
         'list_of_sites': list_of_sites,
@@ -44,10 +55,12 @@ def index(request):
         'select_site_form': select_site_form,
         'network_form': network_form,
         'networks_available': networks_available,
+        'networks_available_hosts': networks_available_hosts,
+        'hosts_available': hosts_available,
         'task_status': task_status,
         'sites_exists': sites_exists,
     })
-    return render(request, 'scan/index.html', context)
+    return render(request, 'scan/overview.html', context)
 
 @login_required
 def sites(request):
