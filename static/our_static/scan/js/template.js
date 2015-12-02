@@ -28,4 +28,16 @@ $(document).ready(function () {
             $(this).find('i').addClass('fa-chevron-right');
         }
     });
+
+    $("#add-site-form").submit(function(e) {
+        if ($('#add-site-input').val() == 'CNAP') {
+            $('#add-site-form-group').animate().addClass('has-error');
+            $('#add-site-error').fadeIn();
+            e.preventDefault();
+        } else if ($('#add-site-form-group').hasClass('has-error')) {
+            $('#add-site-form-group').animate().removeClass('has-error');
+            $('#add-site-error').animate().hide();
+            e.preventDefault();
+        }
+    });
 });

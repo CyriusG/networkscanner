@@ -11,11 +11,8 @@ from .tasks import scanNetwork
 @login_required
 def index(request):
 
-    list_of_sites = Site.objects.all()
     task_status = True
-    select_site_form = SelectSiteForm()
     network_form = None
-    sites_exists = True
 
     try:
         latest_scan = Scan.objects.latest('id')
@@ -29,36 +26,80 @@ def index(request):
         selected_site = None
 
     try:
-        network_form = NetworkForm()
-    except Siteuser.DoesNotExist:
-        sites_exists = False
+        networks = Network.objects.all().order_by('-id').filter(site=request.user.siteuser.current_site)[:20]
+    except Network.DoesNotExist:
+        networks = None
+
+    networks_list = []
+
+    if networks:
+        for network in networks:
+            network_list = []
+
+            try:
+                network_num_hosts = Host.objects.all().order_by('-id').filter(network__contains=network.id)
+            except Host.DoesNotExist:
+                network_num_hosts = None
+
+            network_list.append(network)
+            network_list.append(len(network_num_hosts))
+            networks_list.append(network_list)
 
     try:
-        networks_available = Network.objects.all().order_by('id').filter(site=request.user.siteuser.current_site)
+        hosts = Host.objects.all().order_by('-id').filter(site=request.user.siteuser.current_site)[:20]
     except Siteuser.DoesNotExist:
-        networks_available = None
+        hosts = None
+
+    hosts_list = []
+
+    if hosts:
+        for host in hosts:
+            host_list = []
+
+            try:
+                host_num_services = Service.objects.all().order_by('-id').filter(host=host)
+            except Service.DoesNotExist:
+                host_num_services = None
+
+            host_list.append(host)
+            host_list.append(len(host_num_services))
+            hosts_list.append(host_list)
 
     try:
-        for network in networks_available:
-            networks_available_hosts = Host.objects.all().order_by('id').filter(network=network.id)
-    except Host.DoesNotExist:
-        networks_available_hosts = 0
+        scans = Scan.objects.all().order_by('-id').filter(site=request.user.siteuser.current_site)[:20]
+    except Scan.DoesNotExist:
+        scans = None
+
+    scans_list = []
+
+    if scans:
+        for scan in scans:
+            scan_list = []
+
+            networks = scan.networks.split(',')
+
+            try:
+                networks = Network.objects.all().order_by('-id').filter(id__in=networks)
+            except Network.DoesNotExist:
+                networks = None
+
+            scan_list.append(scan)
+            scan_list.append(networks)
+            scans_list.append(scan_list)
 
     try:
-        hosts_available = Host.objects.all().order_by('id').filter(site=request.user.siteuser.current_site)
-    except Siteuser.DoesNotExist:
-        hosts_available = None
+        sites = Site.objects.all().order_by('id')
+    except Site.DoesNotExist:
+        sites = None
 
     context = RequestContext(request, {
-        'list_of_sites': list_of_sites,
         'selected_site': selected_site,
-        'select_site_form': select_site_form,
         'network_form': network_form,
-        'networks_available': networks_available,
-        'networks_available_hosts': networks_available_hosts,
-        'hosts_available': hosts_available,
+        'networks_list': networks_list,
+        'hosts_list': hosts_list,
+        'scans_list': scans_list,
+        'sites': sites,
         'task_status': task_status,
-        'sites_exists': sites_exists,
     })
     return render(request, 'scan/overview.html', context)
 
@@ -104,6 +145,11 @@ def addsite(request):
                 site = Site.objects.get(name=site_name)
                 site_user = Siteuser(user=request.user, current_site=site)
                 site_user.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def checksite(request):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

@@ -94,3 +94,7 @@ a {
 .table-no-background {
 	background: 0 !important;
 }
+
+#add-site-error {
+	display: none;
+}
