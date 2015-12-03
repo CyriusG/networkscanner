@@ -8,12 +8,16 @@ a {
 	outline: none !important;
 }
 
-.fa-info {
-	color: #1C87C9;
-}
-
 .fa-check {
 	color: white;
+}
+
+.fa-times {
+	color: black;
+}
+
+.fa-times:hover {
+	color: red;
 }
 
 .left-align{
@@ -96,5 +100,9 @@ a {
 }
 
 #add-site-error {
+	display: none;
+}
+
+#add-network-error {
 	display: none;
 }

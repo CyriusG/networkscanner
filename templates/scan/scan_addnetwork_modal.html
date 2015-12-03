@@ -1,31 +1,32 @@
 <div class="modal fade" id="add-network" tabindex="-1" role="dialog" aria-labelledby="addnetwork-modal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="addnetwork-modal">Add new network</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-            <div class="col-xs-12">
-                <p>Enter a network in the slash notation format.</p>
-                <form action="" class="form form-inline">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control add-network-address input-sm" placeholder="Network address" maxlength="15" required autofocus>
-                            <span class="input-group-addon input-sm" style="border-left: 0; border-right: 0;">/</span>
-                            <input type="text" class="form-control add-network-subnet center-align input-sm" placeholder="0-32" maxlength="2" required>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addnetwork-modal">Add new network</h4>
+            </div>
+            <form method="POST" action="{% url 'scan:addnetwork' %}" class="form form-inline" id="add-network-form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p>Enter a network in the slash notation format.</p>
+                            <div class="alert alert-block alert-danger" id="add-network-error">This network already exists for this site.</div>
+                            <div class="form-group" id="add-network-form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control add-network-address input-sm" id="add-network-input-address" name="network_address" placeholder="Network address" maxlength="15" required autofocus >
+                                    <div class="input-group-addon input-sm" style="border-left: 0; border-right: 0;">/</div>
+                                    <input type="text" class="form-control add-network-subnet center-align input-sm" id="add-network-input-subnet" name="subnet_bits" placeholder="0-32" maxlength="2" required >
+                                </div>
+                            </div>
                         </div>
                     </div>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button>
+                    <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+                </div>
+            </form>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button>
-        </form>
-        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
-        </form>
-      </div>
     </div>
-  </div>
 </div>

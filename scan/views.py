@@ -118,19 +118,103 @@ def index(request):
     return render(request, 'scan/overview.html', context)
 
 @login_required
-def sites(request):
-    sites_in_db = Site.objects.order_by('-id')[:20]
-    site_form = SiteForm(request.POST or None)
+def scan(request):
 
-    if site_form.is_valid():
-        instance = site_form.save(commit=False)
-        instance.save()
+    try:
+        site_user = Siteuser.objects.get(user=request.user)
+        current_site = site_user.current_site
+    except Siteuser.DoesNotExist:
+        try:
+            default_site = Site.objects.get(default=True)
+        except Site.DoesNotExist:
+            default_site = Site(name="Default Site", default=True)
+            default_site.save()
+        site_user = Siteuser(user=request.user, current_site=default_site)
+        site_user.save()
+        current_site = default_site
+
+    try:
+        sites = Site.objects.all().order_by('id')
+    except Site.DoesNotExist:
+        sites = None
+
+    try:
+        networks = Network.objects.all().order_by('-id').filter(site=current_site)[:20]
+    except Network.DoesNotExist:
+        networks = None
+
+    networks_list = []
+
+    if networks:
+        for network in networks:
+            network_list = []
+
+            try:
+                network_num_hosts = Host.objects.all().order_by('-id').filter(network__contains=network.id)
+            except Host.DoesNotExist:
+                network_num_hosts = None
+
+            network_list.append(network)
+            network_list.append(len(network_num_hosts))
+            networks_list.append(network_list)
+
+    try:
+        scans = Scan.objects.all().order_by('-id').filter(site=current_site)[:20]
+    except Scan.DoesNotExist:
+        scans = None
+
+    scans_list = []
+
+    if scans:
+        for scan in scans:
+            scan_list = []
+
+            networks = scan.networks.split(',')
+
+            try:
+                networks = Network.objects.all().order_by('-id').filter(id__in=networks)
+            except Network.DoesNotExist:
+                networks = None
+
+            scan_list.append(scan)
+            scan_list.append(networks)
+            scans_list.append(scan_list)
 
     context = RequestContext(request, {
-        'sites_in_db': sites_in_db,
-        'site_form': site_form,
+        'sites': sites,
+        'networks_list': networks_list,
+        'scans_list': scans_list,
     })
-    return render(request, 'scan/sites.html', context)
+
+    return render(request, 'scan/scan.html', context)
+
+@login_required
+def addnetwork(request):
+    if request.method == 'POST':
+        network_address = request.POST['network_address']
+        subnet_bits = request.POST['subnet_bits']
+        site = request.user.siteuser.current_site
+        network = Network(site=site, network_address=network_address, subnet_bits=subnet_bits)
+        network.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def checknetwork(request):
+
+    network_exist = False
+
+    if request.method == 'GET':
+        network_address = request.GET['network']
+        subnet_bits = request.GET['subnet']
+        try:
+            Network.objects.get(site=request.user.siteuser.current_site, network_address=network_address, subnet_bits=subnet_bits)
+            network_exist = "True"
+        except Network.DoesNotExist:
+            network_exist = "False"
+
+    return HttpResponse(network_exist)
+
 
 @login_required
 def results(request):
@@ -194,50 +278,4 @@ def updatesite(request, site):
         except Site.DoesNotExist:
             site_user = None
 
-    # if request.method == 'POST' and 'select_site' in request.POST:
-    #     select_site_form = SelectSiteForm(request.POST or None)
-    #     if select_site_form.is_valid():
-    #         data = select_site_form.cleaned_data
-    #         site = data['current_site']
-    #         selected_site = Site.objects.get(name=site)
-    #         try:
-    #             Siteuser.objects.get(user=request.user)
-    #         except Siteuser.DoesNotExist:
-    #             site = Site.objects.get(name=site)
-    #             site_user = Siteuser(user=request.user, current_site=site)
-    #             site_user.save()
-    #         current_user = Siteuser.objects.get(user=request.user)
-    #         current_user.current_site = selected_site
-    #         current_user.save()
-
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-@login_required
-def addnetwork(request):
-    if request.method == 'POST' and 'add_network' in request.POST:
-        site = Network(site=request.user.siteuser.current_site)
-        network_form = NetworkForm(request.POST or None, instance=site)
-        if network_form.is_valid():
-            network_form_instance = network_form.save(commit=False)
-            network_form_instance.save()
-
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-@login_required
-def scan(request):
-    try:
-        latest_scan = Scan.objects.latest('id')
-        latest_scan_status = latest_scan.ready
-        if latest_scan_status:
-            task_status = AsyncResult(latest_scan.taskID).ready()
-    except Scan.DoesNotExist:
-        task_status = True
-
-    if task_status:
-        if request.method == 'POST' and 'scan_network' in request.POST:
-            network_selected = request.POST['network_selected']
-            site = request.user.siteuser.current_site
-            task = scanNetwork.delay(network_selected, site)
-            query = Scan(site=site,networks=network_selected, taskID=task.id, ready=task.ready())
-            query.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

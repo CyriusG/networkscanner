@@ -46,4 +46,24 @@ $(document).ready(function () {
             }
         });
     });
+
+    $("#add-network-form").submit(function(e) {
+        e.preventDefault();
+
+        var network_address;
+        var subnet_bits;
+        network_address = $('#add-network-input-address').val();
+        subnet_bits = $('#add-network-input-subnet').val();
+
+        $.get('/scan/checknetwork/', {network: network_address, subnet: subnet_bits}, function(data) {
+            if (data == "False") {
+                $('#add-network-form-group').animate().removeClass('has-error');
+                $('#add-network-error').slideUp();
+                $("#add-network-form").unbind('submit').submit();
+            } else {
+                $('#add-network-form-group').animate().addClass('has-error');
+                $('#add-network-error').slideDown();
+            }
+        });
+    });
 });

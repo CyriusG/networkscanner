@@ -1,4 +1,5 @@
 {% extends 'scan/basefiles/base.html' %}
+{% block nav_scan %}active{% endblock %}
 {% block content %}
 {% include 'scan/scan_addnetwork_modal.html' %}
     <div class="networks">
@@ -6,9 +7,7 @@
             <div class="col-xs-12">
                 <h4>Networks</h4>
                 <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i>Scan selected networks</button></a>
-                <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="Add a site before starting a scan."><i class="fa fa-search"></i>Scan selected networks</button></a>
                 <a href="#"><button type="submit" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="This might take a few minutes."><i class="fa fa-search"></i>Scan selected networks</button></a>
-                <button class="btn btn-success btn-xs disabled" data-toggle="tooltip" data-placement="top" title="Add a site before adding networks."><i class="fa fa-plus"></i> Add network</button>
                 <a href="#" data-toggle="modal" data-target="#add-network"><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button></a>
                 <form action="" class="form form-inline">
                     <table class="table table-striped">
@@ -18,23 +17,26 @@
                                     <th class="center-align"><input type="checkbox" class="checkbox" id="allstates"></th>
                                     <th>ID</th>
                                 </span>
-                                <th class="col-md-2 col-sm-3">Network address</th>
-                                <th class="col-xs-2">Subnet bits</th>
-                                <th class="col-xs-3">Discovered hosts</th>
-                                <th class="col-md-4 col-sm-3">Added</th>
-                            </tr>
+                                <th class="col-xs-2">Network</th>
+                                <th class="col-xs-4">Hosts</th>
+                                <th class="col-xs-4">Added</th>
+                                <th class="col-xs-1">Actions</th>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="center-align">
-                                    <input class="record_table" type="checkbox">
-                                </td>
-                                <td>1</td>
-                                <td class="left-align">192.168.1.0</td>
-                                <td class="left-align">24</td>
-                                <td class="left-align"><a href="#">5</a></td>
-                                <td class="left-align">2015-11-28 15:00:00</td>
-                            </tr>
+                            {% for network in networks_list %}
+                                <tr>
+                                    <td class="center-align">
+                                        <input class="record_table" type="checkbox" value="{{ network.0.id }}">
+                                    </td>
+                                    <td class="left-align">{{ network.0.id }}</td>
+                                    <td class="left-align">{{ network.0.network_address }}/{{ network.0.subnet_bits }}</td>
+                                    <td class="left-align">{{ network.1 }}</td>
+                                    <td class="left-align">{{ network.0.timestamp|date:"Y-m-d H:i:s" }}</td>
+                                    <td class="left-align">
+                                         <a class="link-color" href="#">Details</a> | <a href="#"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </form>
@@ -51,50 +53,32 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th class="col-xs-3">Task ID</th>
-                            <th class="col-xs-4">Networks</th>
-                            <span class="col-xs-5">
-                                <th>Start time</th>
-                                <th>Complete</th>
-                                <th>Status</th>
-                            </span>
+                            <th class="col-xs-6">Networks</th>
+                            <th class="col-xs-3">Start time</th>
+                            <th class="col-xs-3">Complete</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><a class="link-color" href="#">1</a></td>
-                            <td class="left-align">29e0df39-0df4-4809-a268-26a6d3cc9eff</td>
-                            <td class="left-align">
-                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
-                            </td>
-                            <td class="left-align">2015-11-28 15:00:00</td>
-                            <td class="left-align"></td>
-                            <td class="left-align"><span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> In progress</span></td>
-                        </tr>
-                        <tr>
-                            <td><a class="link-color" href="#">1</a></td>
-                            <td class="left-align">29e0df39-0df4-4809-a268-26a6d3cc9eff</td>
-                            <td class="left-align">
-                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
-                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
-                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
-                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
-                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
-                            </td>
-                            <td class="left-align">2015-11-28 15:00:00</td>
-                            <td class="left-align">2015-11-28 15:00:30</td>
-                            <td class="left-align"><span class="label label-success"><i class="fa fa-check"></i> Completed</span></td>
-                        </tr>
-                        <tr>
-                            <td><a class="link-color" href="#">1</a></td>
-                            <td class="left-align">29e0df39-0df4-4809-a268-26a6d3cc9eff</td>
-                            <td class="left-align">
-                                <span class="label label-default"><a href="#">192.168.255.110/32</a></span>
-                            </td>
-                            <td class="left-align">2015-11-28 15:00:00</td>
-                            <td class="left-align">2015-11-28 15:00:00</td>
-                            <td class="left-align"><span class="label label-success"><i class="fa fa-check"></i> Completed</span></td>
-                        </tr>
+                        {% for scan in scans_list %}
+                            <tr>
+                                <td class="left-align">{{ scan.0.id }}</td>
+                                <td class="left-align">
+                                    {% for network in scan.1 %}
+                                        <span class="label label-default"><a href="{{ network.id }}">{{ network.network_address }}/{{ network.subnet_bits }}</a></span>
+                                    {% endfor %}
+                                </td>
+                                <td class="left-align">{{ scan.0.timestamp|date:"Y-m-d H:i:s"  }}</td>
+                                <td class="left-align">{{ scan.0.updated|date:"Y-m-d H:i:s" }}</td>
+                                <td class="left-align">
+                                    {% if scan.0.ready %}
+                                        <span class="label label-success"><i class="fa fa-check"></i> Completed</span>
+                                    {% else %}
+                                        <span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> In progress</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
