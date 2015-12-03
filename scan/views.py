@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from celery.result import AsyncResult
 
@@ -15,6 +15,20 @@ def index(request):
     network_form = None
 
     try:
+        site_user = Siteuser.objects.get(user=request.user)
+        current_site = site_user.current_site
+    except Siteuser.DoesNotExist:
+        try:
+            default_site = Site.objects.get(default=True)
+        except Site.DoesNotExist:
+            default_site = Site(name="Default Site", default=True)
+            default_site.save()
+        site_user = Siteuser(user=request.user, current_site=default_site)
+        site_user.save()
+        current_site = default_site
+
+
+    try:
         latest_scan = Scan.objects.latest('id')
         if latest_scan:
             task_status = AsyncResult(latest_scan.taskID).ready()
@@ -26,7 +40,7 @@ def index(request):
         selected_site = None
 
     try:
-        networks = Network.objects.all().order_by('-id').filter(site=request.user.siteuser.current_site)[:20]
+        networks = Network.objects.all().order_by('-id').filter(site=current_site)[:20]
     except Network.DoesNotExist:
         networks = None
 
@@ -46,7 +60,7 @@ def index(request):
             networks_list.append(network_list)
 
     try:
-        hosts = Host.objects.all().order_by('-id').filter(site=request.user.siteuser.current_site)[:20]
+        hosts = Host.objects.all().order_by('-id').filter(site=current_site)[:20]
     except Siteuser.DoesNotExist:
         hosts = None
 
@@ -66,7 +80,7 @@ def index(request):
             hosts_list.append(host_list)
 
     try:
-        scans = Scan.objects.all().order_by('-id').filter(site=request.user.siteuser.current_site)[:20]
+        scans = Scan.objects.all().order_by('-id').filter(site=current_site)[:20]
     except Scan.DoesNotExist:
         scans = None
 
@@ -124,52 +138,77 @@ def results(request):
     hosts = Host.objects.all().filter(site=request.user.siteuser.current_site)
     services = Service.objects.all().filter(host=hosts)
 
+    try:
+        sites = Site.objects.all().order_by('id')
+    except Site.DoesNotExist:
+        sites = None
+
+
     context = RequestContext(request, {
         'hosts_in_db': hosts,
         'services_in_db': services,
+        'sites': sites
     })
 
     return render(request, 'scan/results.html', context)
 
 @login_required
 def addsite(request):
-    if request.method == 'POST' and 'add_site' in request.POST:
-        add_site_form = SiteForm(request.POST or None)
-        if add_site_form.is_valid():
-            add_site_form.save()
-            data = add_site_form.cleaned_data
-            site_name = data['name']
-            try:
-                Siteuser.objects.get(user=request.user)
-            except Siteuser.DoesNotExist:
-                site = Site.objects.get(name=site_name)
-                site_user = Siteuser(user=request.user, current_site=site)
-                site_user.save()
+    if request.method == 'POST':
+        site_name = request.POST['site_name']
+        site = Site(name=site_name, default=False)
+        site.save()
+        try:
+            Siteuser.objects.get(user=request.user)
+        except Siteuser.DoesNotExist:
+            site = Site.objects.get(name=site_name)
+            site_user = Siteuser(user=request.user, current_site=site)
+            site_user.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
 def checksite(request):
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    site_exist = False
+
+    if request.method == 'GET':
+        site = request.GET['site_name']
+        try:
+            Site.objects.get(name=site)
+            site_exist = "True"
+        except Site.DoesNotExist:
+            site_exist = "False"
+
+    return HttpResponse(site_exist)
 
 @login_required
-def updatesite(request):
-    if request.method == 'POST' and 'select_site' in request.POST:
-        select_site_form = SelectSiteForm(request.POST or None)
-        if select_site_form.is_valid():
-            data = select_site_form.cleaned_data
-            site = data['current_site']
-            selected_site = Site.objects.get(name=site)
-            try:
-                Siteuser.objects.get(user=request.user)
-            except Siteuser.DoesNotExist:
-                site = Site.objects.get(name=site)
-                site_user = Siteuser(user=request.user, current_site=site)
-                site_user.save()
-            current_user = Siteuser.objects.get(user=request.user)
-            current_user.current_site = selected_site
-            current_user.save()
+def updatesite(request, site):
+
+    if site:
+        site_user = request.user.siteuser
+        try:
+            new_site = Site.objects.get(name=site)
+            site_user.current_site = new_site
+            site_user.save()
+        except Site.DoesNotExist:
+            site_user = None
+
+    # if request.method == 'POST' and 'select_site' in request.POST:
+    #     select_site_form = SelectSiteForm(request.POST or None)
+    #     if select_site_form.is_valid():
+    #         data = select_site_form.cleaned_data
+    #         site = data['current_site']
+    #         selected_site = Site.objects.get(name=site)
+    #         try:
+    #             Siteuser.objects.get(user=request.user)
+    #         except Siteuser.DoesNotExist:
+    #             site = Site.objects.get(name=site)
+    #             site_user = Siteuser(user=request.user, current_site=site)
+    #             site_user.save()
+    #         current_user = Siteuser.objects.get(user=request.user)
+    #         current_user.current_site = selected_site
+    #         current_user.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

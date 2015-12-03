@@ -6,10 +6,11 @@ from django.db import models
 # and another field for when it was last updated.
 class Site(models.Model):
     name = models.CharField(max_length=200, unique=True, null=False, blank=False)
+    default = models.BinaryField()
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     def __unicode__(self):
-        return self.name
+        return self.name + " Default: " + str(self.default)
 
 # Model for associating a user with a site.
 class Siteuser(models.Model):

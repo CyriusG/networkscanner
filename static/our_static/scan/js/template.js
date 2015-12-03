@@ -30,14 +30,20 @@ $(document).ready(function () {
     });
 
     $("#add-site-form").submit(function(e) {
-        if ($('#add-site-input').val() == 'CNAP') {
-            $('#add-site-form-group').animate().addClass('has-error');
-            $('#add-site-error').fadeIn();
-            e.preventDefault();
-        } else if ($('#add-site-form-group').hasClass('has-error')) {
-            $('#add-site-form-group').animate().removeClass('has-error');
-            $('#add-site-error').animate().hide();
-            e.preventDefault();
-        }
+        e.preventDefault();
+
+        var site;
+        site = $('#add-site-input').val();
+
+        $.get('/site/checksite/', {site_name: site}, function(data) {
+            if (data == "False") {
+                $('#add-site-form-group').animate().removeClass('has-error');
+                $('#add-site-error').slideUp();
+                $("#add-site-form").unbind('submit').submit();
+            } else {
+                $('#add-site-form-group').animate().addClass('has-error');
+                $('#add-site-error').slideDown();
+            }
+        });
     });
 });
