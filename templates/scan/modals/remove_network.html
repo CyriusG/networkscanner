@@ -16,8 +16,8 @@
                 <form method="POST" action="{% url 'scan:removenetwork' %}">
                     {% csrf_token %}
                     <input type="hidden" name="network_id" id="network_id">
-                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-times" style="color: white;"></i> Remove network</button>
                     <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-times" style="color: white;"></i> Remove network</button>
                 </form>
             </div>
         </div>
