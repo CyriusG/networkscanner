@@ -2,6 +2,7 @@
 {% block nav_scan %}active{% endblock %}
 {% block content %}
 {% include 'scan/scan_addnetwork_modal.html' %}
+{% include 'scan/remove_network_modal.html' %}
     <div class="networks">
         <div class="row">
             <div class="col-xs-12">
@@ -33,7 +34,7 @@
                                     <td class="left-align">{{ network.1 }}</td>
                                     <td class="left-align">{{ network.0.timestamp|date:"Y-m-d H:i:s" }}</td>
                                     <td class="left-align">
-                                         <a class="link-color" href="#">Details</a> | <a href="#"><i class="fa fa-times"></i></a>
+                                         <a class="link-color" href="#">Details</a> | <a href="#" remove-network-id="{{ network.0.id }}" remove-network="{{ network.0.network_address }}/{{ network.0.subnet_bits }}" id="remove-network-link"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}

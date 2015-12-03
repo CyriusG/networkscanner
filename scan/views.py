@@ -200,6 +200,14 @@ def addnetwork(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
+def removenetwork(request):
+    if request.method == 'POST':
+        network_id = request.POST['network_id']
+        Network.objects.get(id=network_id).delete()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
 def checknetwork(request):
 
     network_exist = False
