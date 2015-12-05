@@ -16,6 +16,12 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+# These are url:s that are used for django administration (Back-End)
+# Known as url routing
+# Caret ^ = Start of url
+# Dollar sign $ = End of url
+# If no url is matched, user is prompted with a 404 not found
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('scan.urls', namespace="scan")),
