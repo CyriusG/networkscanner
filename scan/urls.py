@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^scan/addnetwork/$', views.addnetwork, name='addnetwork'),
     url(r'^scan/removenetwork/$', views.removenetwork, name='removenetwork'),
     url(r'^scan/checknetwork/$', views.checknetwork, name='checknetwork'),
+    url(r'^scan/scannetwork/$', views.scannetwork, name='scannetwork'),
 ]

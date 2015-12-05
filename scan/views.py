@@ -11,7 +11,6 @@ from .tasks import scanNetwork
 @login_required
 def index(request):
 
-    task_status = True
     network_form = None
 
     try:
@@ -26,7 +25,6 @@ def index(request):
         site_user = Siteuser(user=request.user, current_site=default_site)
         site_user.save()
         current_site = default_site
-
 
     try:
         latest_scan = Scan.objects.latest('id')
@@ -115,11 +113,11 @@ def index(request):
         'sites': sites,
         'task_status': task_status,
     })
+
     return render(request, 'scan/overview.html', context)
 
 @login_required
 def scan(request):
-
     try:
         site_user = Siteuser.objects.get(user=request.user)
         current_site = site_user.current_site
@@ -134,9 +132,16 @@ def scan(request):
         current_site = default_site
 
     try:
+        latest_scan = Scan.objects.latest('id')
+        task_status = latest_scan.ready
+    except Scan.DoesNotExist:
+        task_status = True
+
+    try:
         sites = Site.objects.all().order_by('id')
     except Site.DoesNotExist:
         sites = None
+
 
     try:
         networks = Network.objects.all().order_by('-id').filter(site=current_site)[:20]
@@ -150,7 +155,7 @@ def scan(request):
             network_list = []
 
             try:
-                network_num_hosts = Host.objects.all().order_by('-id').filter(network__contains=network.id)
+                network_num_hosts = Host.objects.all().order_by('-id').filter(network=network.id)
             except Host.DoesNotExist:
                 network_num_hosts = None
 
@@ -184,9 +189,33 @@ def scan(request):
         'sites': sites,
         'networks_list': networks_list,
         'scans_list': scans_list,
+        'task_status': task_status,
     })
 
     return render(request, 'scan/scan.html', context)
+
+@login_required
+def scannetwork(request):
+    task_status = True
+
+    try:
+        latest_scan = Scan.objects.latest('id')
+        latest_scan_status = latest_scan.ready
+        if latest_scan_status:
+            task_status = AsyncResult(latest_scan.taskID).ready()
+    except Scan.DoesNotExist:
+        task_status = True
+
+    networks_id = ""
+
+    if task_status:
+        if request.method == 'POST':
+            networks_id = request.POST.getlist('scan_network_id')
+
+            task = scanNetwork.delay(networks_id, request.user.siteuser.current_site)
+            query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready())
+            query.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
 def addnetwork(request):
@@ -203,7 +232,35 @@ def addnetwork(request):
 def removenetwork(request):
     if request.method == 'POST':
         network_id = request.POST['network_id']
-        Network.objects.get(id=network_id).delete()
+
+        try:
+            networks = Network.objects.get(id=network_id)
+            networks.delete()
+        except Network.DoesNotExist:
+            networks = None
+
+        try:
+            hosts = Host.objects.all().filter(network=network_id)
+            for host in hosts:
+                host.delete()
+        except Host.DoesNotExist:
+            hosts = None
+
+        scans = Scan.objects.all().filter(networks__contains=network_id)
+
+        for scan in scans:
+            networks = scan.networks.split(',')
+
+            if len(networks) == 1:
+                scan.delete()
+            else:
+                new_networks = []
+                for network in networks:
+                    if network != network_id:
+                        new_networks.append(str(network))
+                new_networks = ','.join(network_join for network_join in new_networks)
+                scan.networks = str(new_networks)
+                scan.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

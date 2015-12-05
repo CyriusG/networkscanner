@@ -7,10 +7,14 @@
         <div class="row">
             <div class="col-xs-12">
                 <h4>Networks</h4>
-                <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i>Scan selected networks</button></a>
-                <a href="#"><button type="submit" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="This might take a few minutes."><i class="fa fa-search"></i>Scan selected networks</button></a>
+                {% if task_status != "False" %}
+                    <a href="#" id="scan-network-submit"><button type="submit" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="This might take a few minutes."><i class="fa fa-search"></i>Scan selected networks</button></a>
+                {% else %}
+                    <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i>Scan selected networks</button></a>
+                {% endif %}
                 <a href="#" data-toggle="modal" data-target="#add-network"><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button></a>
-                <form action="" class="form form-inline">
+                <form method="POST" action="{% url 'scan:scannetwork' %}" class="form form-inline" id="scan-network-form">
+                    {% csrf_token %}
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -27,14 +31,14 @@
                             {% for network in networks_list %}
                                 <tr>
                                     <td class="center-align">
-                                        <input class="record_table" type="checkbox" value="{{ network.0.id }}">
+                                        <input class="record_table" type="checkbox" value="{{ network.0.id }}" name="scan_network_id">
                                     </td>
                                     <td class="left-align">{{ network.0.id }}</td>
                                     <td class="left-align">{{ network.0.network_address }}/{{ network.0.subnet_bits }}</td>
                                     <td class="left-align">{{ network.1 }}</td>
                                     <td class="left-align">{{ network.0.timestamp|date:"Y-m-d H:i:s" }}</td>
                                     <td class="left-align">
-                                         <a class="link-color" href="#">Details</a> | <a href="#" remove-network-id="{{ network.0.id }}" remove-network="{{ network.0.network_address }}/{{ network.0.subnet_bits }}" id="remove-network-link"><i class="fa fa-times"></i></a>
+                                         <a class="link-color" href="#">Details</a> | <a href="#" class="remove-network-link" remove-network-id="{{ network.0.id }}" remove-network="{{ network.0.network_address }}/{{ network.0.subnet_bits }}"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -71,8 +75,8 @@
                                 </td>
                                 <td class="left-align">{{ scan.0.timestamp|date:"Y-m-d H:i:s"  }}</td>
                                 <td class="left-align">{{ scan.0.updated|date:"Y-m-d H:i:s" }}</td>
-                                <td class="left-align">
-                                    {% if scan.0.ready %}
+                                <td class="center-align">
+                                    {% if scan.0.ready != "False" %}
                                         <span class="label label-success"><i class="fa fa-check"></i> Completed</span>
                                     {% else %}
                                         <span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> In progress</span>

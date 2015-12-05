@@ -67,11 +67,19 @@ $(document).ready(function () {
         });
     });
 
-    $('#remove-network-link').click(function(e) {
+    $('.remove-network-link').click(function(e) {
         e.preventDefault();
 
         $('#network-to-remove').html($(this).attr('remove-network'));
         $('#network_id').val($(this).attr('remove-network-id'))
         $('#remove-network').modal('toggle');
+    });
+
+    $('#scan-network-submit').click(function(e){
+        e.preventDefault();
+
+        if ($('.record_table').is(":checked")) {
+            $("#scan-network-form").unbind('submit').submit();
+        }
     });
 });
