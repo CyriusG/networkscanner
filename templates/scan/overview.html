@@ -89,7 +89,7 @@
                                         <td class="left-align">{{ scan.0.timestamp|date:"Y-m-d H:i:s"  }}</td>
                                         <td class="left-align">{{ scan.0.updated|date:"Y-m-d H:i:s" }}</td>
                                         <td class="left-align">
-                                            {% if scan.0.ready %}
+                                            {% if scan.0.ready != "False" %}
                                                 <span class="label label-success"><i class="fa fa-check"></i> Completed</span>
                                             {% else %}
                                                 <span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> In progress</span>
