@@ -50,7 +50,7 @@ INSTALLED_APPS = (
     # Third-party applications
     'registration',
     'crispy_forms',
-    # Our applications
+    # Our applications, points to networkscanner/templates/scan/
     'scan',
 )
 
@@ -67,14 +67,14 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-# Points to url file ???????????????????????????????????????? we have two files...
+# Points to url file
 
 ROOT_URLCONF = 'networkscanner.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], # This makes it OS independent
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
