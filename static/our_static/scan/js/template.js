@@ -6,10 +6,18 @@ $(document).ready(function () {
     $("input[type='checkbox']").change(function (e) {
         // If it is checked and has the correct class attached to it, add the class info to it to change color.
         if ($(this).is(":checked") && $(this).hasClass("record_table")) {
-            $(this).closest('tr').addClass("info");
+            if ($(this).attr('num-hosts') != "0") {
+                $(this).closest('tr').addClass("warning");
+            } else {
+                $(this).closest('tr').addClass("info");
+            }
         // If it is not checked, remove the info class.
         } else if ($(this).hasClass("record_table")) {
-            $(this).closest('tr').removeClass("info");
+            if ($(this).attr('num-hosts') != "0") {
+                $(this).closest('tr').removeClass("warning");
+            } else {
+                $(this).closest('tr').removeClass("info");
+            }
         }
     });
 
@@ -77,9 +85,25 @@ $(document).ready(function () {
 
     $('#scan-network-submit').click(function(e){
         e.preventDefault();
+        var warning = false;
 
         if ($('.record_table').is(":checked")) {
-            $("#scan-network-form").unbind('submit').submit();
+            $('.record_table').each(function() {
+                if($(this).attr('num-hosts') != "0"){
+                    warning = true;
+                }
+            });
+
+            if (warning == true) {
+                $('#scan-network-warning').modal('toggle');
+            }
+            else {
+                $("#scan-network-form").unbind('submit').submit();
+            }
         }
+    });
+
+    $('#scan-network-warning-submit').click(function() {
+        $("#scan-network-form").unbind('submit').submit();
     });
 });

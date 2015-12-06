@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from celery.result import AsyncResult
 
-from .forms import NetworkForm, SelectSiteForm, SiteForm
 from .models import Scan, Site, Siteuser, Network, Host, Service
 from .tasks import scanNetwork
 
@@ -164,7 +163,7 @@ def scan(request):
             networks_list.append(network_list)
 
     try:
-        scans = Scan.objects.all().order_by('-id').filter(site=current_site)[:20]
+        scans = Scan.objects.all().order_by('-id').filter(site=current_site)[:10]
     except Scan.DoesNotExist:
         scans = None
 
@@ -196,21 +195,22 @@ def scan(request):
 
 @login_required
 def scannetwork(request):
-    task_status = True
 
     try:
         latest_scan = Scan.objects.latest('id')
         latest_scan_status = latest_scan.ready
-        if latest_scan_status:
-            task_status = AsyncResult(latest_scan.taskID).ready()
     except Scan.DoesNotExist:
-        task_status = True
+        latest_scan_status = True
 
-    networks_id = ""
-
-    if task_status:
+    if latest_scan_status:
         if request.method == 'POST':
             networks_id = request.POST.getlist('scan_network_id')
+
+            for network in networks_id:
+                hosts = Host.objects.all().filter(network=network)
+                if len(hosts) > 0:
+                    for host in hosts:
+                        host.delete()
 
             task = scanNetwork.delay(networks_id, request.user.siteuser.current_site)
             query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready())

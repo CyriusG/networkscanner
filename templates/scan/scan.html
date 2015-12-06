@@ -3,6 +3,7 @@
 {% block content %}
 {% include 'scan/modals/add_network.html' %}
 {% include 'scan/modals/remove_network.html' %}
+{% include 'scan/modals/scan_netowork_warning.html' %}
     <div class="networks">
         <div class="row">
             <div class="col-xs-12">
@@ -31,7 +32,7 @@
                             {% for network in networks_list %}
                                 <tr>
                                     <td class="center-align">
-                                        <input class="record_table" type="checkbox" value="{{ network.0.id }}" name="scan_network_id">
+                                        <input class="record_table" type="checkbox" value="{{ network.0.id }}" num-hosts="{{ network.1 }}" name="scan_network_id">
                                     </td>
                                     <td class="left-align">{{ network.0.id }}</td>
                                     <td class="left-align">{{ network.0.network_address }}/{{ network.0.subnet_bits }}</td>
@@ -49,7 +50,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <h4>Five latest scans</h4>
+                <h4>Ten latest scans</h4>
             </div>
         </div>
         <div class="row">
