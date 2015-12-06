@@ -3,7 +3,7 @@ from django.db import models
 
 # This is where data is stored
 
-# Definiation for the site model
+# Definition for the site model
 # Contains a name for user reference, a timestamp which indicates when it was created
 # and another field for when it was last updated.
 
