@@ -4,6 +4,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from celery.result import AsyncResult
 
+# Import defied models from scan/models
+
 from .models import Scan, Site, Siteuser, Network, Host, Service
 from .tasks import scanNetwork
 

@@ -1,11 +1,8 @@
 from django import forms
 
-from .models import Scan, Network, Site, Siteuser
+# Imports the models defined from scan/models
 
-class NetworkForm(forms.ModelForm):
-    class Meta:
-        model = Network
-        fields = ['site', 'network_address', 'subnet_bits']
+from .models import Scan, Network, Site, Siteuser
 
 # class ScanForm(forms.ModelForm):
 #     # def __init__(self, site, *args, **kwargs):
@@ -15,6 +12,13 @@ class NetworkForm(forms.ModelForm):
 #     class Meta:
 #         model = Scan
 #         fields = ['networks']
+
+# Structure of the form for defined model in Django administration
+
+class NetworkForm(forms.ModelForm):
+    class Meta:
+        model = Network
+        fields = ['site', 'network_address', 'subnet_bits']
 
 class SiteForm(forms.ModelForm):
     class Meta:
