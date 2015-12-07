@@ -1,5 +1,4 @@
 from django.conf.urls import url
-
 from . import views
 
 # These are url:s that are used for django administration (Back-End)
@@ -7,7 +6,6 @@ from . import views
 # Caret ^ = Start of url
 # Dollar sign $ = End of url
 # If no url is matched, user is prompted with a 404 not found
-
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^results/$', views.results, name='results'),

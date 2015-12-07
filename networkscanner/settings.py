@@ -33,11 +33,9 @@ CACHES = {
 ALLOWED_HOSTS = []
 
 # Celery settings
-
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
 
 # Application definition
-
 INSTALLED_APPS = (
     # Django applications
     'django.contrib.admin',
@@ -55,7 +53,6 @@ INSTALLED_APPS = (
 )
 
 # Between a request and a response
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,7 +65,6 @@ MIDDLEWARE_CLASSES = (
 )
 
 # Points to url file
-
 ROOT_URLCONF = 'networkscanner.urls'
 
 TEMPLATES = [
@@ -91,7 +87,6 @@ WSGI_APPLICATION = 'networkscanner.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -104,11 +99,9 @@ DATABASES = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
-
-# Self explanatory, changed time zone from UTC in order to get a correct timestamp
-
 LANGUAGE_CODE = 'en-us'
 
+# Self explanatory, changed time zone from UTC in order to get a correct timestamp
 TIME_ZONE = 'Europe/Stockholm'
 
 USE_I18N = True
@@ -119,7 +112,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
