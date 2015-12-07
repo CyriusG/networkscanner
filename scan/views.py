@@ -299,6 +299,17 @@ def results(request):
         site_user.save()
         current_site = default_site
 
+    try:
+        latest_scan = Scan.objects.latest('id')
+        task_status = latest_scan.ready
+    except Scan.DoesNotExist:
+        task_status = True
+
+    try:
+        sites = Site.objects.all().order_by('id')
+    except Site.DoesNotExist:
+        sites = None
+
     results = []
 
     try:
@@ -346,6 +357,8 @@ def results(request):
         results = None
 
     context = RequestContext(request, {
+        'sites': sites,
+        'task_status': task_status,
         'results': results,
     })
 
