@@ -4,15 +4,13 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from celery.result import AsyncResult
 
-# Import defied models from scan/models
+# Import defined models from scan/models
 
 from .models import Scan, Site, Siteuser, Network, Host, Service
 from .tasks import scanNetwork
 
 @login_required
 def index(request):
-
-    network_form = None
 
     try:
         site_user = Siteuser.objects.get(user=request.user)
@@ -107,7 +105,6 @@ def index(request):
 
     context = RequestContext(request, {
         'selected_site': selected_site,
-        'network_form': network_form,
         'networks_list': networks_list,
         'hosts_list': hosts_list,
         'scans_list': scans_list,
@@ -321,7 +318,6 @@ def results(request):
         for network in networks:
             result = []
             hosts = []
-            services = []
 
             try:
                 hosts_objects = Host.objects.all().filter(network=network.id)
@@ -357,9 +353,9 @@ def results(request):
         results = None
 
     context = RequestContext(request, {
+        'results': results,
         'sites': sites,
         'task_status': task_status,
-        'results': results,
     })
 
     return render(request, 'scan/results.html', context)
