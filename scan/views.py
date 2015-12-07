@@ -286,19 +286,67 @@ def checknetwork(request):
 @login_required
 def results(request):
 
-    hosts = Host.objects.all().filter(site=request.user.siteuser.current_site)
-    services = Service.objects.all().filter(host=hosts)
+    try:
+        site_user = Siteuser.objects.get(user=request.user)
+        current_site = site_user.current_site
+    except Siteuser.DoesNotExist:
+        try:
+            default_site = Site.objects.get(default=True)
+        except Site.DoesNotExist:
+            default_site = Site(name="Default Site", default=True)
+            default_site.save()
+        site_user = Siteuser(user=request.user, current_site=default_site)
+        site_user.save()
+        current_site = default_site
+
+    results = []
 
     try:
-        sites = Site.objects.all().order_by('id')
-    except Site.DoesNotExist:
-        sites = None
+        networks = Network.objects.all().filter(site=current_site)
+    except Network.DoesNotExist:
+        networks = None
 
+    if networks:
+        for network in networks:
+            result = []
+            hosts = []
+            services = []
+
+            try:
+                hosts_objects = Host.objects.all().filter(network=network.id)
+            except Host.DoesNotExist:
+                hosts_objects = None
+
+            if hosts_objects:
+                for host in hosts_objects:
+
+                    host_objects = []
+                    services = []
+
+                    try:
+                        services_objects = Service.objects.all().filter(host=host)
+                    except Service.DoesNotExist:
+                        services_objects = None
+
+                    if services_objects:
+                        for service in services_objects:
+                            services.append(service)
+
+                    host_objects.append(host)
+                    host_objects.append(services)
+                    host_objects.append(len(services))
+
+                    hosts.append(host_objects)
+
+            result.append(network)
+            result.append(hosts)
+
+            results.append(result)
+    else:
+        results = None
 
     context = RequestContext(request, {
-        'hosts_in_db': hosts,
-        'services_in_db': services,
-        'sites': sites
+        'results': results,
     })
 
     return render(request, 'scan/results.html', context)

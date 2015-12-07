@@ -13,8 +13,7 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="col-xs-1">ID</th>
-                                        <th class="col-xs-2">Network</th>
+                                        <th class="col-xs-3">Network</th>
                                         <th class="col-xs-4">Hosts</th>
                                         <th class="col-xs-5">Added</th>
                                     </tr>
@@ -22,7 +21,6 @@
                                 <tbody>
                                     {% for network in networks_list %}
                                         <tr>
-                                            <td>{{ network.0.id }}</td>
                                             <td>{{ network.0.network_address }}/{{ network.0.subnet_bits }}</td>
                                             <td>{{ network.1 }}</td>
                                             <td>{{ network.0.timestamp|date:"Y-m-d H:i:s" }}</td>
@@ -40,8 +38,7 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="col-xs-1">ID</th>
-                                        <th class="col-xs-2">Address</th>
+                                        <th class="col-xs-3">Address</th>
                                         <th class="col-xs-4">Services</th>
                                         <th class="col-xs-5">Added</th>
                                     </tr>
@@ -49,7 +46,6 @@
                                 <tbody>
                                     {% for host in hosts_list %}
                                         <tr>
-                                            <td>{{ host.0.id }}</td>
                                             <td>{{ host.0.ip }}</td>
                                             <td>{{ host.1 }}</td>
                                             <td>{{ host.0.timestamp|date:"Y-m-d H:i:s" }}</td>
@@ -70,7 +66,6 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th class="col-xs-6">Networks</th>
                                     <th class="col-xs-3">Start time</th>
                                     <th class="col-xs-3">Complete</th>
@@ -80,7 +75,6 @@
                             <tbody>
                                 {% for scan in scans_list %}
                                     <tr>
-                                        <td class="left-align">{{ scan.0.id }}</td>
                                         <td class="left-align">
                                             {% for network in scan.1 %}
                                                 <span class="label label-default"><a href="{{ network.id }}">{{ network.network_address }}/{{ network.subnet_bits }}</a></span>
