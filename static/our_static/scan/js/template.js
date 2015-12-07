@@ -5,20 +5,74 @@ $(document).ready(function () {
     // Change the row color if the user checks the checkmark.
     $("input[type='checkbox']").change(function (e) {
         // If it is checked and has the correct class attached to it, add the class info to it to change color.
-        if ($(this).is(":checked") && $(this).hasClass("record_table")) {
+        if ($(this).is(":checked") && $(this).hasClass("check-network")) {
             if ($(this).attr('num-hosts') != "0") {
                 $(this).closest('tr').addClass("warning");
             } else {
                 $(this).closest('tr').addClass("info");
             }
         // If it is not checked, remove the info class.
-        } else if ($(this).hasClass("record_table")) {
+        } else if ($(this).hasClass("check-network")) {
             if ($(this).attr('num-hosts') != "0") {
                 $(this).closest('tr').removeClass("warning");
             } else {
                 $(this).closest('tr').removeClass("info");
             }
         }
+    });
+
+     $('#check-all-networks').click(function() {
+       if($(this).is(':checked')) {
+           $('.check-network').each(function(e) {
+              $(this).prop('checked', true);
+                if ($(this).attr('num-hosts') != "0") {
+                    $(this).closest('tr').addClass("warning");
+                } else {
+                    $(this).closest('tr').addClass("info");
+                }
+           });
+       } else {
+           $('.check-network').each(function(e) {
+              $(this).prop('checked', false);
+                if ($(this).attr('num-hosts') != "0") {
+                    $(this).closest('tr').removeClass("warning");
+                } else {
+                    $(this).closest('tr').removeClass("info");
+                }
+           });
+       }
+    });
+
+    $('.remove-network-link').click(function(e) {
+        e.preventDefault();
+
+        $('#network-to-remove').html($(this).attr('remove-network'));
+        $('#network_id').val($(this).attr('remove-network-id'))
+        $('#remove-network').modal('toggle');
+    });
+
+    $('#scan-network-submit').click(function(e){
+        e.preventDefault();
+        var warning = false;
+
+        if ($('.check-network').is(":checked")) {
+            $('.check-network').each(function() {
+                if($(this).attr('num-hosts') != "0"){
+                    warning = true;
+                }
+            });
+
+            if (warning == true) {
+                $('#scan-network-warning').modal('toggle');
+            }
+            else {
+                $("#scan-network-form").unbind('submit').submit();
+            }
+        }
+    });
+
+    $('#scan-network-warning-submit').click(function() {
+        $("#scan-network-form").unbind('submit').submit();
     });
 
     // Change expand arrow when clicking.
@@ -73,37 +127,5 @@ $(document).ready(function () {
                 $('#add-network-error').slideDown();
             }
         });
-    });
-
-    $('.remove-network-link').click(function(e) {
-        e.preventDefault();
-
-        $('#network-to-remove').html($(this).attr('remove-network'));
-        $('#network_id').val($(this).attr('remove-network-id'))
-        $('#remove-network').modal('toggle');
-    });
-
-    $('#scan-network-submit').click(function(e){
-        e.preventDefault();
-        var warning = false;
-
-        if ($('.record_table').is(":checked")) {
-            $('.record_table').each(function() {
-                if($(this).attr('num-hosts') != "0"){
-                    warning = true;
-                }
-            });
-
-            if (warning == true) {
-                $('#scan-network-warning').modal('toggle');
-            }
-            else {
-                $("#scan-network-form").unbind('submit').submit();
-            }
-        }
-    });
-
-    $('#scan-network-warning-submit').click(function() {
-        $("#scan-network-form").unbind('submit').submit();
     });
 });

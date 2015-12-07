@@ -39,7 +39,7 @@ def index(request):
         selected_site = None
 
     try:
-        networks = Network.objects.all().order_by('-id').filter(site=current_site)[:20]
+        networks = Network.objects.all().order_by('-id').filter(site=current_site)[:10]
     except Network.DoesNotExist:
         networks = None
 
@@ -59,7 +59,7 @@ def index(request):
             networks_list.append(network_list)
 
     try:
-        hosts = Host.objects.all().order_by('-id').filter(site=current_site)[:20]
+        hosts = Host.objects.all().order_by('-id').filter(site=current_site)[:10]
     except Siteuser.DoesNotExist:
         hosts = None
 
@@ -79,7 +79,7 @@ def index(request):
             hosts_list.append(host_list)
 
     try:
-        scans = Scan.objects.all().order_by('-id').filter(site=current_site)[:20]
+        scans = Scan.objects.all().order_by('-id').filter(site=current_site)[:10]
     except Scan.DoesNotExist:
         scans = None
 

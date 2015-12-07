@@ -20,7 +20,7 @@
                         <thead>
                             <tr>
                                 <span class="col-xs-1">
-                                    <th class="center-align"><input type="checkbox" class="checkbox" id="allstates"></th>
+                                    <th class="center-align"><input type="checkbox" class="checkbox" id="check-all-networks"></th>
                                     <th>ID</th>
                                 </span>
                                 <th class="col-xs-2">Network</th>
@@ -32,7 +32,7 @@
                             {% for network in networks_list %}
                                 <tr>
                                     <td class="center-align">
-                                        <input class="record_table" type="checkbox" value="{{ network.0.id }}" num-hosts="{{ network.1 }}" name="scan_network_id">
+                                        <input class="check-network" type="checkbox" value="{{ network.0.id }}" num-hosts="{{ network.1 }}" name="scan_network_id">
                                     </td>
                                     <td class="left-align">{{ network.0.id }}</td>
                                     <td class="left-align">{{ network.0.network_address }}/{{ network.0.subnet_bits }}</td>
@@ -50,7 +50,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <h4>Ten latest scans</h4>
+                <h4>Latest scans</h4>
             </div>
         </div>
         <div class="row">
