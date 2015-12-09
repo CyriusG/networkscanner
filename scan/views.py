@@ -11,11 +11,9 @@ from .tasks import scanNetwork
 
 @login_required
 def index(request):
-
     try:
-        site_user = Siteuser.objects.get(user=request.user)
-        current_site = site_user.current_site
-    except Siteuser.DoesNotExist:
+        current_site = request.user.siteuser.current_site
+    except:
         try:
             default_site = Site.objects.get(default=True)
         except Site.DoesNotExist:
@@ -117,9 +115,8 @@ def index(request):
 @login_required
 def scan(request):
     try:
-        site_user = Siteuser.objects.get(user=request.user)
-        current_site = site_user.current_site
-    except Siteuser.DoesNotExist:
+        current_site = request.user.siteuser.current_site
+    except:
         try:
             default_site = Site.objects.get(default=True)
         except Site.DoesNotExist:
@@ -282,11 +279,9 @@ def checknetwork(request):
 
 @login_required
 def results(request):
-
     try:
-        site_user = Siteuser.objects.get(user=request.user)
-        current_site = site_user.current_site
-    except Siteuser.DoesNotExist:
+        current_site = request.user.siteuser.current_site
+    except:
         try:
             default_site = Site.objects.get(default=True)
         except Site.DoesNotExist:
@@ -347,6 +342,7 @@ def results(request):
 
             result.append(network)
             result.append(hosts)
+            result.append(len(hosts))
 
             results.append(result)
     else:

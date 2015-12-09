@@ -33,7 +33,11 @@
                             <li><a href="#" data-toggle="modal" data-target="#add-site">New site</a></li>
                             <li role="separator" class="divider"></li>
                             {% for site in sites %}
-                                <li {% if request.user.siteuser.current_site.name == site.name %}class="disabled"{% endif %}><a href="{% url 'scan:updatesite' site.name %}">{{ site.name }}</a></li>
+                                {% if request.user.siteuser.current_site.name == site.name %}
+                                    <li class="disabled"><a href="">{{ site.name }}</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'scan:updatesite' site.name %}">{{ site.name }}</a></li>
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     </div>
@@ -53,7 +57,7 @@
 
                 {% endblock %}
             </div>
-        </div><!-- /.container -->
+        </div>
 
         {% include 'scan/basefiles/base_js.html' %}
 

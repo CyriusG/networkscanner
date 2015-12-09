@@ -13,7 +13,7 @@
                     <a href="#" data-toggle="modal" data-target="#add-network"><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button></a>
                 {% else %}
                     <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i>Scan selected networks</button></a>
-                    <a href=""><button class="btn btn-success btn-xs disabled"><i class="fa fa-plus"></i> Add network</button></a>
+                    <a href=""><button class="btn btn-success btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-plus"></i> Add network</button></a>
                 {% endif %}
                 <form method="POST" action="{% url 'scan:scannetwork' %}" class="form form-inline" id="scan-network-form">
                     {% csrf_token %}
@@ -90,6 +90,5 @@
                 </table>
             </div>
         </div>
-    </div>
     </div>
 {% endblock %}

@@ -2,103 +2,103 @@
 {% block nav_overview %}active{% endblock %}
 
 {% block content %}
-        <div class="networks">
-            {% if request.user.siteuser.current_site %}
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="row">
-                            <h4>Latest networks</h4>
-                        </div>
-                        <form action="" class="form form-inline">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="col-xs-3">Network</th>
-                                        <th class="col-xs-4">Hosts</th>
-                                        <th class="col-xs-5">Added</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for network in networks_list %}
-                                        <tr>
-                                            <td>{{ network.0.network_address }}/{{ network.0.subnet_bits }}</td>
-                                            <td>{{ network.1 }}</td>
-                                            <td>{{ network.0.timestamp|date:"Y-m-d H:i:s" }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </form>
+    <div class="networks">
+        {% if request.user.siteuser.current_site %}
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="row">
+                        <h4>Latest networks</h4>
                     </div>
-                    <div class="col-xs-6">
-                        <div class="row">
-                            <h4>Latest hosts</h4>
-                        </div>
-                        <form action="" class="form form-inline">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="col-xs-3">Address</th>
-                                        <th class="col-xs-4">Services</th>
-                                        <th class="col-xs-5">Added</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for host in hosts_list %}
-                                        <tr>
-                                            <td>{{ host.0.ip }}</td>
-                                            <td>{{ host.1 }}</td>
-                                            <td>{{ host.0.timestamp|date:"Y-m-d H:i:s" }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </form>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h4>Latest scans</h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
+                    <form action="" class="form form-inline">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th class="col-xs-6">Networks</th>
-                                    <th class="col-xs-3">Start time</th>
-                                    <th class="col-xs-3">Complete</th>
-                                    <th>Status</th>
+                                    <th class="col-xs-3">Network</th>
+                                    <th class="col-xs-4">Hosts</th>
+                                    <th class="col-xs-5">Added</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for scan in scans_list %}
+                                {% for network in networks_list %}
                                     <tr>
-                                        <td class="left-align">
-                                            {% for network in scan.1 %}
-                                                <span class="label label-default"><a href="{{ network.id }}">{{ network.network_address }}/{{ network.subnet_bits }}</a></span>
-                                            {% endfor %}
-                                        </td>
-                                        <td class="left-align">{{ scan.0.timestamp|date:"Y-m-d H:i:s"  }}</td>
-                                        <td class="left-align">
-                                            {% if scan.0.updated|date:"Y-m-d H:i:s" != scan.0.timestamp|date:"Y-m-d H:i:s"  %}
-                                                {{ scan.0.updated|date:"Y-m-d H:i:s" }}
-                                            {% endif %}
-                                        </td>
-                                        <td class="left-align">
-                                            {% if scan.0.ready != "False" %}
-                                                <span class="label label-success"><i class="fa fa-check"></i> Completed</span>
-                                            {% else %}
-                                                <span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> In progress</span>
-                                            {% endif %}
-                                        </td>
+                                        <td>{{ network.0.network_address }}/{{ network.0.subnet_bits }}</td>
+                                        <td>{{ network.1 }}</td>
+                                        <td>{{ network.0.timestamp|date:"Y-m-d H:i:s" }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
-                    </div>
+                    </form>
                 </div>
-            {% endif %}
-        </div>
+                <div class="col-xs-6">
+                    <div class="row">
+                        <h4>Latest hosts</h4>
+                    </div>
+                    <form action="" class="form form-inline">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-3">Address</th>
+                                    <th class="col-xs-4">Services</th>
+                                    <th class="col-xs-5">Added</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for host in hosts_list %}
+                                    <tr>
+                                        <td>{{ host.0.ip }}</td>
+                                        <td>{{ host.1 }}</td>
+                                        <td>{{ host.0.timestamp|date:"Y-m-d H:i:s" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4>Latest scans</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-xs-6">Networks</th>
+                                <th class="col-xs-3">Start time</th>
+                                <th class="col-xs-3">Complete</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for scan in scans_list %}
+                                <tr>
+                                    <td class="left-align">
+                                        {% for network in scan.1 %}
+                                            <span class="label label-default"><a href="{{ network.id }}">{{ network.network_address }}/{{ network.subnet_bits }}</a></span>
+                                        {% endfor %}
+                                    </td>
+                                    <td class="left-align">{{ scan.0.timestamp|date:"Y-m-d H:i:s"  }}</td>
+                                    <td class="left-align">
+                                        {% if scan.0.updated|date:"Y-m-d H:i:s" != scan.0.timestamp|date:"Y-m-d H:i:s"  %}
+                                            {{ scan.0.updated|date:"Y-m-d H:i:s" }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="left-align">
+                                        {% if scan.0.ready != "False" %}
+                                            <span class="label label-success"><i class="fa fa-check"></i> Completed</span>
+                                        {% else %}
+                                            <span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> In progress</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
