@@ -6,7 +6,6 @@ from django.db import models
 # Definition for the site model
 # Contains a name for user reference, a timestamp which indicates when it was created
 # and another field for when it was last updated.
-
 class Site(models.Model):
     name = models.CharField(max_length=200, unique=True, null=False, blank=False)
     default = models.BinaryField()
@@ -16,7 +15,6 @@ class Site(models.Model):
         return self.name + " Default: " + str(self.default)
 
 # Model for associating a user with a site.
-
 class Siteuser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     current_site = models.ForeignKey(Site)
@@ -26,7 +24,6 @@ class Siteuser(models.Model):
 # Each network entry contains a record which points at the site object,
 # what network address and subnet bits the network that is being defined has
 # and a timestamp to indicate when it was created.
-
 class Network(models.Model):
     site = models.ForeignKey(Site, null=False, blank=False)
     network_address = models.GenericIPAddressField(blank=False, null=False)
@@ -40,7 +37,6 @@ class Network(models.Model):
 # Database entry which points at what site a scan belongs to, what networks that are being scanned
 # in a comma separated integer format so that multiple networks can be referenced
 # if it is ready (true/false) and timestamps to indicate when it was created and when it was last updated.
-
 class Scan(models.Model):
     site = models.ForeignKey(Site, null=False, blank=False)
     networks = models.CommaSeparatedIntegerField(max_length=200)
@@ -53,7 +49,6 @@ class Scan(models.Model):
 
 # Points at what site the host belongs to, what IP it has, what network as a single integer field, its hostname
 # and a timestamp to indicate when it was added.
-
 class Host(models.Model):
     site = models.ForeignKey(Site, null=False, blank=False)
     ip = models.CharField(max_length=15)
@@ -65,7 +60,6 @@ class Host(models.Model):
 
 # Points at what host the service belongs to, what the port is, what protocol, what the state of the port is and
 # what the service is called.
-
 class Service(models.Model):
     host = models.ForeignKey(Host, null=False, blank=False)
     portID = models.CharField(max_length=5)
