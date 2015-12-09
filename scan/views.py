@@ -48,7 +48,7 @@ def index(request):
     # Now list the 10 latest networks that were previously scanned
     # If there are no networks available, list nothing
     try:
-        networks = Network.objects.all().order_by('-id').filter(site=current_site)[:10]
+        networks = Network.objects.all().order_by('-id').filter(site=current_site)[:5]
     except Network.DoesNotExist:
         networks = None
 
@@ -70,7 +70,7 @@ def index(request):
     # If hosts have been discovered, list the most recent 10
     # If no hosts exist, list nothing
     try:
-        hosts = Host.objects.all().order_by('-id').filter(site=current_site)[:10]
+        hosts = Host.objects.all().order_by('-id').filter(site=current_site)[:5]
     except Siteuser.DoesNotExist:
         hosts = None
 
