@@ -27,7 +27,13 @@
                                                     <th class="col-xs-3">Hostname</th>
                                                     <th class="col-xs-1">Services</th>
                                                     <th class="col-xs-5">Added</th>
-                                                    <th></th>
+                                                    <th class="left-align">
+                                                        {% if task_status == "False" %}
+                                                            <a class="btn btn-primary btn-xs disabled" href="" role="button"><i class="fa fa-search"></i> Discover hosts</a>
+                                                        {% else %}
+                                                            <a class="btn btn-primary btn-xs" href="{% url 'scan:discoveros' result.0.id %}" role="button"><i class="fa fa-search"></i> Discover hosts</a>
+                                                        {% endif %}
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -51,13 +57,15 @@
                                                         <td>{{ host.0.dnsName }}</td>
                                                         <td>{{ host.2 }}</td>
                                                         <td>{{ host.0.timestamp|date:"Y-m-d H:i:s" }}</td>
-                                                        {% if host.0.os != "unknown" %}
-                                                           <td class="center-align"> <span class="label label-success"><i class="fa fa-check"></i> Discovered</span></td>
-                                                        {% elif task_status == "False" %}
-                                                            <td class="center-align"><a class="btn btn-primary btn-xs disabled" href="{" role="button"><i class="fa fa-search"></i> Discover host</a></td>
-                                                        {% else %}
-                                                            <td class="center-align"><a class="btn btn-primary btn-xs" href="{% url 'scan:discoverhost' host.0.id %}" role="button"><i class="fa fa-search"></i> Discover host</a></td>
-                                                        {% endif %}
+                                                        <td class="left-align">
+                                                            {% if host.0.os == "notfound" %}
+                                                                <span class="label label-default"><i class="fa fa-times"></i> Not found</span>
+                                                            {% elif host.0.os != "unknown" %}
+                                                                <span class="label label-success"><i class="fa fa-check"></i> Discovered</span>
+                                                            {% else %}
+                                                                <span class="label label-danger"><i class="fa fa-times"></i> Not discovered</span>
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="no-height" colspan="7">

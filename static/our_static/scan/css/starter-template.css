@@ -13,10 +13,14 @@ a {
 }
 
 .fa-times {
+	color: white;
+}
+
+.fa-times-color {
 	color: black;
 }
 
-.fa-times:hover {
+.fa-times-color:hover {
 	color: red;
 }
 
@@ -47,7 +51,7 @@ a {
 	text-decoration: none;
 }
 
-.label-default:hover {
+.label-default-link:hover {
 	background-color: #555555;
 }
 

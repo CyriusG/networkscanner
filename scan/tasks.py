@@ -7,28 +7,41 @@ from .models import Network, Host, Site, Service, Scan
 app = Celery('tasks', backend='amqp', broke='amqp://guest@localhost//')
 
 @app.task(bind=True)
-def scanNetwork(self, networks, site, discover_host, host_id):
-    if discover_host:
+def scanNetwork(self, networks, site, discover_host):
+    for network in networks:
+        network = Network.objects.get(id=network)
+        network_address = network.network_address
+        subnet_bits = network.subnet_bits
+        network_nmap = network_address + "/" + subnet_bits
 
-        host = Host.objects.get(id=host_id)
+        if discover_host:
+            nmap_output = commands.getoutput("nmap -O -oX - %s" % network_nmap)
+            xml_soup = BeautifulSoup(nmap_output)
 
-        nmap_output = commands.getoutput("nmap -O -oX - %s" % host.ip)
-        xml_soup = BeautifulSoup(nmap_output)
+            if xml_soup:
+                for host_xml in xml_soup.findAll("host"):
+                    if host_xml:
+                        host_xml_ip = host_xml.find("address").get("addr")
+                        host_xml_os = host_xml.findAll("osclass")
 
-        if xml_soup:
-            os = xml_soup.findAll("osclass")
-            if os:
-                os_name = os[0].get("osfamily")
+                        if host_xml_os:
+                            host_xml_os_family = host_xml_os[0].get("osfamily")
+                        else:
+                            host_xml_os_family = None
 
-                host.os = os_name.lower()
-                host.save()
-    else:
-        for network in networks:
-            network = Network.objects.get(id=network)
-            network_address = network.network_address
-            subnet_bits = network.subnet_bits
-            network_nmap = network_address + "/" + subnet_bits
+                        host_os_family = "notfound"
 
+                        if host_xml_os_family:
+                            host_os_family = host_xml_os_family
+
+                        try:
+                            host = Host.objects.get(site=site, ip=host_xml_ip)
+                            host.os = host_os_family.lower()
+                            host.save()
+                        except Host.DoesNotExist:
+                            pass
+
+        else:
             nmap_output = commands.getoutput("nmap -oX - %s" % network_nmap)
             xml_soup = BeautifulSoup(nmap_output)
             if xml_soup:

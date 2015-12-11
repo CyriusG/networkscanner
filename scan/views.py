@@ -148,6 +148,7 @@ def scan(request):
         site_user = Siteuser(user=request.user, current_site=default_site)
         site_user.save()
         current_site = default_site
+
     # Load the latest scans if there are any available
     try:
         latest_scan = Scan.objects.latest('id')
@@ -217,6 +218,21 @@ def scan(request):
 @login_required
 def scannetwork(request):
 
+    # Use the current site to load information from
+    try:
+        site_user = Siteuser.objects.get(user=request.user)
+        current_site = site_user.current_site
+    # If no site have been created (new user), load "default site"
+    except Siteuser.DoesNotExist:
+        try:
+            default_site = Site.objects.get(default=True)
+        except Site.DoesNotExist:
+            default_site = Site(name="Default Site", default=True)
+            default_site.save()
+        site_user = Siteuser(user=request.user, current_site=default_site)
+        site_user.save()
+        current_site = default_site
+
     try:
         latest_scan = Scan.objects.latest('id')
         latest_scan_status = latest_scan.ready
@@ -233,13 +249,28 @@ def scannetwork(request):
                     for host in hosts:
                         host.delete()
 
-            task = scanNetwork.delay(networks_id, request.user.siteuser.current_site, False, None)
+            task = scanNetwork.delay(networks_id, current_site, False)
             query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready(), host_discovery=False)
             query.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
-def discoverhost(request, host_id):
+def discoveros(request, network_id):
+
+    # Use the current site to load information from
+    try:
+        site_user = Siteuser.objects.get(user=request.user)
+        current_site = site_user.current_site
+    # If no site have been created (new user), load "default site"
+    except Siteuser.DoesNotExist:
+        try:
+            default_site = Site.objects.get(default=True)
+        except Site.DoesNotExist:
+            default_site = Site(name="Default Site", default=True)
+            default_site.save()
+        site_user = Siteuser(user=request.user, current_site=default_site)
+        site_user.save()
+        current_site = default_site
 
     try:
         latest_scan = Scan.objects.latest('id')
@@ -248,8 +279,8 @@ def discoverhost(request, host_id):
         latest_scan_status = True
 
     if latest_scan_status:
-        task = scanNetwork.delay(None, None, True, host_id)
-        query = Scan(site=request.user.siteuser.current_site,networks=host_id, taskID=task.id, ready=task.ready(), host_discovery=True)
+        task = scanNetwork.delay(network_id, current_site, True)
+        query = Scan(site=request.user.siteuser.current_site,networks=network_id, taskID=task.id, ready=task.ready(), host_discovery=True)
         query.save()
 
 

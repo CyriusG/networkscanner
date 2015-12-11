@@ -55,21 +55,22 @@ $(document).ready(function () {
         e.preventDefault();
         var warning = false;
 
-        if ($('.check-network').is(":checked")) {
-            $('.check-network').each(function() {
-                if($(this).attr('num-hosts') != "0"){
+        $('.check-network').each(function() {
+            if ($('.check-network').is(":checked")) {
+                if($(this).attr('num-hosts') != '0'){
+                    console.log($(this).attr('num-hosts'))
                     warning = true;
                 }
-            });
-
-            if (warning == true) {
+                if (warning == true) {
                 $('#scan-network-warning').modal('toggle');
+                }
+                else {
+                    $("#scan-network-form").unbind('submit').submit();
+                }
             }
-            else {
-                $("#scan-network-form").unbind('submit').submit();
-            }
-        }
+        });
     });
+
 
     $('#scan-network-warning-submit').click(function() {
         $("#scan-network-form").unbind('submit').submit();
