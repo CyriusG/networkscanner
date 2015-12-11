@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^scan/removenetwork/$', views.removenetwork, name='removenetwork'),
     url(r'^scan/checknetwork/$', views.checknetwork, name='checknetwork'),
     url(r'^scan/scannetwork/$', views.scannetwork, name='scannetwork'),
+    url(r'^scan/discoverhost/(?P<host_id>.+)/$', views.discoverhost, name='discoverhost'),
 ]

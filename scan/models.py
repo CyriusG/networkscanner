@@ -42,10 +42,11 @@ class Scan(models.Model):
     networks = models.CommaSeparatedIntegerField(max_length=200)
     taskID = models.CharField(max_length=200)
     ready = models.BinaryField()
+    host_discovery = models.BinaryField()
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     def __unicode__(self):
-        return self.site.name + ", " + self.taskID + ", " + str(self.ready)
+        return self.site.name + ", " + self.taskID + ", " + str(self.ready) + ", " + str(self.host_discovery)
 
 # Points at what site the host belongs to, what IP it has, what network as a single integer field, its hostname
 # and a timestamp to indicate when it was added.
@@ -54,6 +55,7 @@ class Host(models.Model):
     ip = models.CharField(max_length=15)
     network = models.IntegerField(null=False, blank=False)
     dnsName = models.CharField(max_length=200, blank=True, null=True)
+    os = models.CharField(max_length=200, blank=True, null=True, default="unknown")
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     def __unicode__(self):
 		return 'IP: ' + self.ip + ' Hostname: ' + self.dnsName

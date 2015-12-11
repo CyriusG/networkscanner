@@ -34,12 +34,30 @@
                                                 {% for host in result.1 %}
                                                     <tr>
                                                         <td class="center-align"><a data-toggle="collapse" href="#expand-{{ host.0.id }}" aria-expanded="false" aria-controls="expand-{{ host.0.id }}" class="expand-services link-color"><i class="fa fa-fw fa-chevron-right"></i></a></td>
-                                                        <td class="center-align"><i class="fa fa-question"></i></td>
+                                                        <td class="center-align">
+                                                            {% if host.0.os == "unknown" %}
+                                                                <i class="fa fa-question"></i>
+                                                            {% elif host.0.os == "windows" %}
+                                                                <i class="fa fa-windows"></i>
+                                                            {% elif host.0.os == "apple" %}
+                                                                <i class="fa fa-apple"></i>
+                                                            {% elif host.0.os == "linux" %}
+                                                                <i class="fa fa-linux"></i>
+                                                            {% else %}
+                                                                <i class="fa fa-server"></i>
+                                                            {% endif %}
+                                                        </td>
                                                         <td>{{ host.0.ip }}</td>
                                                         <td>{{ host.0.dnsName }}</td>
                                                         <td>{{ host.2 }}</td>
                                                         <td>{{ host.0.timestamp|date:"Y-m-d H:i:s" }}</td>
-                                                        <td class="center-align"><a class="btn btn-primary btn-xs" href="#" role="button"><i class="fa fa-search"></i> Discover host</a></td>
+                                                        {% if host.0.os != "unknown" %}
+                                                           <td class="center-align"> <span class="label label-success"><i class="fa fa-check"></i> Discovered</span></td>
+                                                        {% elif task_status == "False" %}
+                                                            <td class="center-align"><a class="btn btn-primary btn-xs disabled" href="{" role="button"><i class="fa fa-search"></i> Discover host</a></td>
+                                                        {% else %}
+                                                            <td class="center-align"><a class="btn btn-primary btn-xs" href="{% url 'scan:discoverhost' host.0.id %}" role="button"><i class="fa fa-search"></i> Discover host</a></td>
+                                                        {% endif %}
                                                     </tr>
                                                     <tr>
                                                         <td class="no-height" colspan="7">
