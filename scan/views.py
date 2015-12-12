@@ -98,8 +98,8 @@ def index(request):
             scan_list = [scan]
 
             if scan.host_discovery == "True":
-                host = Host.objects.get(id=scan.networks)
-                scan_list.append(host)
+                network = Network.objects.get(id=scan.networks)
+                scan_list.append(network)
                 scan_list.append(True)
 
             elif scan.host_discovery == "False":
@@ -189,8 +189,8 @@ def scan(request):
             scan_list = [scan]
 
             if scan.host_discovery == "True":
-                host = Host.objects.get(id=scan.networks)
-                scan_list.append(host)
+                network = Network.objects.get(id=scan.networks)
+                scan_list.append(network)
                 scan_list.append(True)
 
             elif scan.host_discovery == "False":

@@ -81,7 +81,7 @@
                                                 <span class="label label-default label-default-link"><a href="{{ network.id }}">{{ network.network_address }}/{{ network.subnet_bits }}</a></span>
                                             {% endfor %}
                                         {% else %}
-                                            <span class="label label-default label-default-link"><a href="{{ scan.1.id }}">Host discovery: {{scan.1.ip }}</a></span>
+                                            <span class="label label-default label-default-link"><a href="{{ scan.1.id }}">OS discovery: {{scan.1.network_address }}/{{ scan.1.subnet_bits }}</a></span>
                                         {% endif %}
                                     </td>
                                     <td class="left-align">{{ scan.0.timestamp|date:"Y-m-d H:i:s"  }}</td>

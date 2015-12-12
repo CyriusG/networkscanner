@@ -59,11 +59,11 @@
                                                         <td>{{ host.0.timestamp|date:"Y-m-d H:i:s" }}</td>
                                                         <td class="left-align">
                                                             {% if host.0.os == "notfound" %}
-                                                                <span class="label label-default"><i class="fa fa-times"></i> Not found</span>
+                                                                <span class="label label-warning"><i class="fa fa-times"></i> Not found</span>
                                                             {% elif host.0.os != "unknown" %}
                                                                 <span class="label label-success"><i class="fa fa-check"></i> Discovered</span>
                                                             {% else %}
-                                                                <span class="label label-danger"><i class="fa fa-times"></i> Not discovered</span>
+                                                                <span class="label label-default"><i class="fa fa-times"></i> Not discovered</span>
                                                             {% endif %}
                                                         </td>
                                                     </tr>
