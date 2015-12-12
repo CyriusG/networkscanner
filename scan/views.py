@@ -16,7 +16,6 @@ from .tasks import scanNetwork
 @login_required
 def index(request):
 
-    network_form = None
     # Use the current site to load information from
     try:
         site_user = Siteuser.objects.get(user=request.user)
@@ -41,10 +40,7 @@ def index(request):
     # If these are not present either, list nothing
     except Scan.DoesNotExist:
         task_status = True
-    try:
-        selected_site = request.user.siteuser.current_site.name
-    except Siteuser.DoesNotExist:
-        selected_site = None
+
     # Now list the 10 latest networks that were previously scanned
     # If there are no networks available, list nothing
     try:
@@ -120,8 +116,7 @@ def index(request):
 
     # Objects for this page, this makes it look nice when you zoooom (vector graphics)
     context = RequestContext(request, {
-        'selected_site': selected_site,
-        'network_form': network_form,
+        'selected_site': current_site,
         'networks_list': networks_list,
         'hosts_list': hosts_list,
         'scans_list': scans_list,
@@ -373,6 +368,11 @@ def results(request):
         site_user.save()
         current_site = default_site
 
+    try:
+        sites = Site.objects.order_by('id')
+    except Site.DoesNotExist:
+        sites = None
+
     results = []
 
     try:
@@ -415,6 +415,7 @@ def results(request):
 
     context = RequestContext(request, {
         'task_status': task_status,
+        'sites': sites,
         'results': results,
     })
 
