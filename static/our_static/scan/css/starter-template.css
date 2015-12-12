@@ -1,3 +1,4 @@
+/*Global*/
 body {
   padding-top: 50px;
   background-color: #E8E8E8;
@@ -7,6 +8,8 @@ a {
 	border: none !important;
 	outline: none !important;
 }
+
+/*Font Awesome*/
 
 .fa-check {
 	color: white;
@@ -24,6 +27,8 @@ a {
 	color: red;
 }
 
+/*Align classes*/
+
 .left-align{
 	text-align: left;
 }
@@ -36,6 +41,7 @@ a {
 	text-align: right;
 }
 
+/*Links*/
 
 .link-color {
 	color: #337AB7 !important;
@@ -44,6 +50,12 @@ a {
 .link-color:hover {
 	color: #286090 !important;
 	text-decoration: none;
+}
+
+/*Labels*/
+
+.label:hover {
+	cursor: default;
 }
 
 .label-default a , .label-default a:hover {
