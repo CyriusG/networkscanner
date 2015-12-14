@@ -98,14 +98,20 @@ def index(request):
             scan_list = [scan]
 
             if scan.host_discovery == "True":
-                network = Network.objects.get(id=scan.networks)
-                scan_list.append(network)
-                scan_list.append(True)
+                try:
+                    network = Network.objects.get(id=scan.networks)
+                    scan_list.append(network)
+                    scan_list.append(True)
+                except Network.DoesNotExist:
+                    pass
 
             elif scan.host_discovery == "False":
-                networks_id = scan.networks.split(',')
-                networks = Network.objects.order_by('-id').filter(id__in=networks_id)
-                scan_list.append(networks)
+                try:
+                    networks_id = scan.networks.split(',')
+                    networks = Network.objects.order_by('-id').filter(id__in=networks_id)
+                    scan_list.append(networks)
+                except Network.DoesNotExist:
+                    pass
 
             scans_list.append(scan_list)
 
@@ -189,14 +195,20 @@ def scan(request):
             scan_list = [scan]
 
             if scan.host_discovery == "True":
-                network = Network.objects.get(id=scan.networks)
-                scan_list.append(network)
-                scan_list.append(True)
+                try:
+                    network = Network.objects.get(id=scan.networks)
+                    scan_list.append(network)
+                    scan_list.append(True)
+                except Network.DoesNotExist:
+                    pass
 
             elif scan.host_discovery == "False":
-                networks_id = scan.networks.split(',')
-                networks = Network.objects.order_by('-id').filter(id__in=networks_id)
-                scan_list.append(networks)
+                try:
+                    networks_id = scan.networks.split(',')
+                    networks = Network.objects.order_by('-id').filter(id__in=networks_id)
+                    scan_list.append(networks)
+                except Network.DoesNotExist:
+                    pass
 
             scans_list.append(scan_list)
 

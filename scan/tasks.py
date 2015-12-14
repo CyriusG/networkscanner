@@ -8,13 +8,15 @@ app = Celery('tasks', backend='amqp', broke='amqp://guest@localhost//')
 
 @app.task(bind=True)
 def scanNetwork(self, networks, site, discover_host):
-    for network in networks:
-        network = Network.objects.get(id=network)
-        network_address = network.network_address
-        subnet_bits = network.subnet_bits
-        network_nmap = network_address + "/" + subnet_bits
+    if discover_host:
+            try:
+                network = Network.objects.get(id=networks)
+                network_address = network.network_address
+                subnet_bits = network.subnet_bits
+                network_nmap = network_address + "/" + subnet_bits
+            except Network.DoesNotExist:
+                network_nmap = None
 
-        if discover_host:
             nmap_output = commands.getoutput("nmap -O -oX - %s --exclude django.ad.cyriusg.se" % network_nmap)
             xml_soup = BeautifulSoup(nmap_output)
 
@@ -40,8 +42,14 @@ def scanNetwork(self, networks, site, discover_host):
                             host.save()
                         except Host.DoesNotExist:
                             pass
+    else:
 
-        else:
+        for network in networks:
+            network = Network.objects.get(id=network)
+            network_address = network.network_address
+            subnet_bits = network.subnet_bits
+            network_nmap = network_address + "/" + subnet_bits
+
             nmap_output = commands.getoutput("nmap -oX - %s --exclude django.ad.cyriusg.se" % network_nmap)
             xml_soup = BeautifulSoup(nmap_output)
             if xml_soup:

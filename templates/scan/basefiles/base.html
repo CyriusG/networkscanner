@@ -5,6 +5,7 @@
 
   <body>
         {% include 'scan/modals/add_site.html' %}
+        {% include 'scan/modals/manage_site.html' %}
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -24,14 +25,13 @@
                         <li class="{% block nav_results %} {% endblock %}"><a href="{% url 'scan:results' %}">Results</a></li>
                     </ul>
 
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-primary navbar-btn btn-sm" title="Currently selected site">{{ request.user.siteuser.current_site.name }}</button>
+                    <div class="dropdown pull-right">
                         <button type="button" class="btn btn-primary dropdown-toggle navbar-btn btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Change site">
+                            {{ request.user.siteuser.current_site.name }}
                             <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="#" data-toggle="modal" data-target="#add-site">New site</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#manage-site">Manage sites</a></li>
                             <li role="separator" class="divider"></li>
                             {% for site in sites %}
                                 {% if request.user.siteuser.current_site.name == site.name %}

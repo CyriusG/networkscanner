@@ -27,6 +27,11 @@ a {
 	color: red;
 }
 
+.fa-globe-color {
+	color: #5CB85C;
+	cursor: default;
+}
+
 /*Align classes*/
 
 .left-align{
@@ -39,6 +44,11 @@ a {
 
 .right-align{
 	text-align: right;
+}
+
+.input-group-xs {
+	height: 24px;
+	font-size: 12px;
 }
 
 /*Links*/
