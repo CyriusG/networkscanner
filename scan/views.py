@@ -238,15 +238,17 @@ def scannetwork(request):
         if request.method == 'POST':
             networks_id = request.POST.getlist('scan_network_id')
 
-            for network in networks_id:
-                hosts = Host.objects.filter(network=network)
-                if len(hosts) > 0:
-                    for host in hosts:
-                        host.delete()
+            if len(networks_id) > 0:
+                for network in networks_id:
+                    hosts = Host.objects.filter(network=network)
+                    if len(hosts) > 0:
+                        for host in hosts:
+                            host.delete()
 
-            task = scanNetwork.delay(networks_id, current_site, False)
-            query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready(), host_discovery=False)
-            query.save()
+                task = scanNetwork.delay(networks_id, current_site, False)
+                query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready(), host_discovery=False)
+                query.save()
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
@@ -376,7 +378,7 @@ def results(request):
     results = []
 
     try:
-        networks = Network.objects.filter(site=current_site)
+        networks = Network.objects.filter(site=current_site).order_by('-id')
     except Network.DoesNotExist:
         networks = None
 
@@ -387,7 +389,7 @@ def results(request):
             hosts = []
 
             try:
-                hosts_objects = Host.objects.filter(network=network.id)
+                hosts_objects = Host.objects.filter(network=network.id).order_by('id')
             except Host.DoesNotExist:
                 hosts_objects = None
 
@@ -396,7 +398,7 @@ def results(request):
                     host_objects = []
 
                     try:
-                        services = Service.objects.filter(host=host)
+                        services = Service.objects.filter(host=host).order_by('id')
                     except Service.DoesNotExist:
                         services = None
 

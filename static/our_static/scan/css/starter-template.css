@@ -52,6 +52,15 @@ a {
 	text-decoration: none;
 }
 
+ul.nav-edit {
+	margin-bottom: 0;
+}
+
+ul.nav-edit li.active {
+	display: inline-block;
+	width: 88%;
+}
+
 /*Labels*/
 
 .label:hover {
@@ -68,14 +77,10 @@ a {
 }
 
 .content {
-  padding: 10px 15px;
+  padding: 10px 15px 0 15px;
   background-color: #FFFFFF;
   border-radius: 0 0 5px 5px;
-}
-
-.networks {
-	padding: 10px;
-	margin-top: 10px;
+  margin-bottom: 50px;
 }
 
 .add-network-address {

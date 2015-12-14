@@ -1,7 +1,3 @@
-# Networkscanner
+# networkscanner
 
 Networkscanner project.
-
-## Deployment
-
-<deployment instructions here>

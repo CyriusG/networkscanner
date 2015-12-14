@@ -56,19 +56,21 @@ $(document).ready(function () {
         var warning = false;
 
         $('.check-network').each(function() {
-            if ($('.check-network').is(":checked")) {
+            if ($(this).is(":checked")) {
                 if($(this).attr('num-hosts') != '0'){
                     console.log($(this).attr('num-hosts'))
                     warning = true;
                 }
-                if (warning == true) {
-                $('#scan-network-warning').modal('toggle');
-                }
-                else {
-                    $("#scan-network-form").unbind('submit').submit();
-                }
             }
         });
+        if ($('.check-network').is(":checked")) {
+            if (warning == true) {
+                $('#scan-network-warning').modal('toggle');
+            }
+            else {
+                $("#scan-network-form").unbind('submit').submit();
+            }
+         }
     });
 
 

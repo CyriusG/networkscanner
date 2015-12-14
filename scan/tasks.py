@@ -15,7 +15,7 @@ def scanNetwork(self, networks, site, discover_host):
         network_nmap = network_address + "/" + subnet_bits
 
         if discover_host:
-            nmap_output = commands.getoutput("nmap -O -oX - %s" % network_nmap)
+            nmap_output = commands.getoutput("nmap -O -oX - %s --exclude django.ad.cyriusg.se" % network_nmap)
             xml_soup = BeautifulSoup(nmap_output)
 
             if xml_soup:
@@ -42,7 +42,7 @@ def scanNetwork(self, networks, site, discover_host):
                             pass
 
         else:
-            nmap_output = commands.getoutput("nmap -oX - %s" % network_nmap)
+            nmap_output = commands.getoutput("nmap -oX - %s --exclude django.ad.cyriusg.se" % network_nmap)
             xml_soup = BeautifulSoup(nmap_output)
             if xml_soup:
                 for q in xml_soup.findAll("host"):

@@ -41,7 +41,7 @@
                                                     <tr>
                                                         <td class="center-align"><a data-toggle="collapse" href="#expand-{{ host.0.id }}" aria-expanded="false" aria-controls="expand-{{ host.0.id }}" class="expand-services link-color"><i class="fa fa-fw fa-chevron-right"></i></a></td>
                                                         <td class="center-align">
-                                                            {% if host.0.os == "unknown" %}
+                                                            {% if host.0.os == "unknown" or host.0.os == "notfound" %}
                                                                 <i class="fa fa-question"></i>
                                                             {% elif host.0.os == "windows" %}
                                                                 <i class="fa fa-windows"></i>
