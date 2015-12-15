@@ -52,6 +52,9 @@
                                         </td>
                                         <td class="right-align">
                                             <span class="manage-site-actions">
+                                                {% if site.default == 'True' %}
+                                                    <i class="fa fa-globe fa-globe-color fa-fw"></i>
+                                                {% endif %}
                                                 <a href="#" class="site-edit" site-id="{{ site.id }}" site-name="{{ site.name }}" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil fa-fw"></i></a>
                                                 {% if site.default == 'False' %}
                                                     <a href="#" class="site-delete" site-id="{{ site.id }}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times fa-times-color fa-fw"></i></a>
@@ -71,7 +74,7 @@
                                                 {% endif %}
                                             </span>
                                             <span class="manage-site-delete">
-                                                <a href="#" class="site-delete-delete" data-toggle="tooltip" data-placement="top" title="Really delete"><i class="fa fa-times fa-times-color fa-fw"></i></a>
+                                                <a href="#" class="site-delete-delete" data-toggle="tooltip" data-placement="top" title="This will delete everything related to this site"><i class="fa fa-times fa-times-color fa-fw"></i></a>
                                                 <a href="#" class="site-delete-cancel" data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-undo fa-fw"></i></a>
                                                 <form class="site-delete-form" method="POST" action="{% url 'scan:deletesite' %}">
                                                     {% csrf_token %}
