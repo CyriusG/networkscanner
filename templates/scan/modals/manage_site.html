@@ -30,10 +30,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><b>Ketchup</b></td>
-                                    <td class="right-align"><i class="fa fa-globe fa-globe-color fa-fw"></i> <i class="fa fa-pencil fa-fw"></i> <i class="fa fa-times fa-times-color fa-fw"></i></td>
-                                </tr>
+                                {% for site in sites %}
+                                    <tr>
+                                        <td>
+                                        {% if site.default == 'True' %}
+                                           <b>{{ site.name }}</b>
+                                        {% else %}
+                                            {{ site.name }}
+                                        {% endif %}
+                                        </td>
+                                        <td class="right-align"><i class="fa fa-globe fa-globe-color fa-fw"></i> <i class="fa fa-pencil fa-fw"></i> <i class="fa fa-times fa-times-color fa-fw"></i></td>
+                                    </tr>
+                                {% endfor %}
                                 <tr>
                                     <td>
                                         <div class="input-group input-group-xs">
