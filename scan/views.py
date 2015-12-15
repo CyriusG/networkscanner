@@ -451,6 +451,46 @@ def addsite(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
+def deletesite(request):
+    if request.method == 'POST':
+        site_id = request.POST['site-delete-id']
+
+        try:
+            site = Site.objects.get(id=site_id)
+
+            if site.default == "False":
+
+                if site.id == request.user.siteuser.current_site.id:
+                    default_site = Site.objects.get(default=True)
+                    request.user.siteuser.current_site = default_site
+
+                site.delete()
+
+        except Site.DoesNotExist:
+            pass
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def defaultsite(request):
+    if request.method == 'POST':
+        site_id = request.POST['site-default-id']
+
+        try:
+            current_default = Site.objects.get(default=True)
+            new_default = Site.objects.get(id=site_id)
+
+            current_default.default = False
+            current_default.save()
+
+            new_default.default = True
+            new_default.save()
+        except Site.DoesNotExist:
+            pass
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
 def checksite(request):
 
     site_exist = False
@@ -474,6 +514,21 @@ def updatesite(request, site):
             new_site = Site.objects.get(name=site)
             site_user.current_site = new_site
             site_user.save()
+        except Site.DoesNotExist:
+            pass
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def sitechangename(request):
+    if request.method == 'POST':
+        site_id = request.POST['change-name-id']
+        site_name = request.POST['change-name-input']
+
+        try:
+            site = Site.objects.get(id=site_id)
+            site.name = site_name
+            site.save()
         except Site.DoesNotExist:
             pass
 

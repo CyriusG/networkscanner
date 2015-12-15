@@ -112,7 +112,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#add-network-form").submit(function(e) {
+    $('#add-network-form').submit(function(e) {
         e.preventDefault();
 
         var network_address;
@@ -130,5 +130,91 @@ $(document).ready(function () {
                 $('#add-network-error').slideDown();
             }
         });
+    });
+
+    //Manage changing of site names
+    $('.site-edit').click(function(e) {
+        e.preventDefault();
+
+        //Get parent table row
+        var parent_row = $(this).closest('tr');
+
+        //Set the input to the current name of the site before displaying it
+        parent_row.find('.change-name-input').val($(this).attr('site-name'));
+
+        //Hide site name span and fadein input box span
+        parent_row.find('.site-name').hide();
+        parent_row.find('.manage-site-name').fadeIn();
+
+        //Focus on the input box
+        parent_row.find('.change-name-input').select();
+
+        //Hide actions span and fadein save span
+        parent_row.find('.manage-site-actions').hide();
+        parent_row.find('.manage-site-save').fadeIn();
+    });
+
+    $('.site-save-cancel').click(function(e) {
+        e.preventDefault();
+
+        //Get parent table row
+        var parent_row = $(this).closest('tr');
+
+        //Hide input box span and fadein name span
+        parent_row.find('.manage-site-name').hide();
+        parent_row.find('.site-name').fadeIn();
+
+        //Hide save span and fadein actions span
+        parent_row.find('.manage-site-save').hide();
+        parent_row.find('.manage-site-actions').fadeIn();
+    });
+
+    $('.site-save').click(function(e) {
+        e.preventDefault();
+
+        //Get parent table row
+        var parent_row = $(this).closest('tr');
+
+        parent_row.find('.site-change-name-form').submit();
+    });
+
+    $('.site-delete').click(function(e) {
+        e.preventDefault();
+
+        //Get parent table row
+        var parent_row = $(this).closest('tr');
+
+        //Hide site name span and fadein input box span
+        parent_row.find('.manage-site-actions').hide();
+        parent_row.find('.manage-site-delete').fadeIn();
+    });
+
+    $('.site-delete-cancel').click(function(e) {
+        e.preventDefault();
+
+        //Get parent table row
+        var parent_row = $(this).closest('tr');
+
+        //Hide site name span and fadein input box span
+        parent_row.find('.manage-site-delete').hide();
+        parent_row.find('.manage-site-actions').fadeIn();
+    });
+
+    $('.site-delete-delete').click(function (e) {
+        e.preventDefault();
+
+        //Get parent table row
+        var parent_row = $(this).closest('tr');
+
+        parent_row.find('.site-delete-form').submit();
+    });
+
+    $('.site-default').click(function(e) {
+        e.preventDefault();
+
+        //Get parent table row
+        var parent_row = $(this).closest('tr');
+
+        parent_row.find('.site-default-form').submit();
     });
 });

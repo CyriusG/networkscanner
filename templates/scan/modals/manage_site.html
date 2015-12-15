@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-xs-12">
 
-                        <table class="table table-striped table-condensed">
+                        <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -33,29 +33,58 @@
                                 {% for site in sites %}
                                     <tr>
                                         <td>
-                                        {% if site.default == 'True' %}
-                                           <b>{{ site.name }}</b>
-                                        {% else %}
-                                            {{ site.name }}
-                                        {% endif %}
+                                            <span class="site-name">
+                                                {% if site.default == 'True' %}
+                                                   <b>{{ site.name }}</b>
+                                                {% else %}
+                                                    {{ site.name }}
+                                                {% endif %}
+                                            </span>
+                                            <span class="manage-site-name">
+                                                <div class="input-group input-group-xs">
+                                                    <form class="site-change-name-form" method="POST" action="{% url 'scan:sitechangename' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" value="{{ site.id }}" name="change-name-id"/>
+                                                        <input type="text" class="form-control input-group-xs change-name-input" name="change-name-input" value="">
+                                                    </form>
+                                                </div>
+                                            </span>
                                         </td>
-                                        <td class="right-align"><i class="fa fa-globe fa-globe-color fa-fw"></i> <i class="fa fa-pencil fa-fw"></i> <i class="fa fa-times fa-times-color fa-fw"></i></td>
+                                        <td class="right-align">
+                                            <span class="manage-site-actions">
+                                                <i class="fa fa-globe {% if site.default == 'True' %} fa-globe-color {% else %} fa-globe-nolink {% endif %} fa-fw"></i>
+                                                <a href="#" class="site-edit" site-id="{{ site.id }}" site-name="{{ site.name }}" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil fa-fw"></i></a>
+                                                {% if site.default == 'False' %}
+                                                    <a href="#" class="site-delete" site-id="{{ site.id }}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times fa-times-color fa-fw"></i></a>
+                                                {% endif %}
+                                            </span>
+                                            <span class="manage-site-save">
+                                                {% if site.default == 'False' %}
+                                                    <a href="#" class="site-default" site-id="{{ site.id }}" data-toggle="tooltip" data-placement="top" title="Make default"><i class="fa fa-globe fa-globe-link fa-fw"></i></a>
+                                                {% endif %}
+                                                <a href="#" class="site-save" site-id="{{ site.id }}" data-toggle="tooltip" data-placement="top" title="Save name"><i class="fa fa-floppy-o fa-fw"></i></a>
+                                                <a href="#" class="site-save-cancel" data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-undo fa-fw"></i></a>
+                                                {% if site.default == 'False' %}
+                                                    <form class="site-default-form" method="POST" action="{% url 'scan:defaultsite' %}">
+                                                        {% csrf_token %}
+                                                        <input type='hidden' value='{{ site.id }}' name='site-default-id'/>
+                                                    </form>
+                                                {% endif %}
+                                            </span>
+                                            <span class="manage-site-delete">
+                                                <a href="#" class="site-delete-delete" data-toggle="tooltip" data-placement="top" title="Really delete"><i class="fa fa-times fa-times-color fa-fw"></i></a>
+                                                <a href="#" class="site-delete-cancel" data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-undo fa-fw"></i></a>
+                                                <form class="site-delete-form" method="POST" action="{% url 'scan:deletesite' %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" value="{{ site.id }}" name="site-delete-id" />
+                                                </form>
+                                            </span>
+                                        </td>
                                     </tr>
                                 {% endfor %}
-                                <tr>
-                                    <td>
-                                        <div class="input-group input-group-xs">
-                                            <input type="text" class="form-control input-group-xs" value="Edit"></td>
-                                        </div>
-                                    <td class="right-align"><i class="fa fa-floppy-o"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Edit</td>
-                                    <td class="right-align"><i class="fa fa-globe fa-fw"></i> <i class="fa fa-pencil fa-fw"></i> <i class="fa fa-times fa-times-color fa-fw"></i></td>
-                                </tr>
                             </tbody>
                         </table>
-                        <small><i class="fa fa-globe fa-globe-color fa-fw"></i> Indicates default site.</small>
+                        <small><i class="fa fa-globe fa-globe-color fa-fw"></i> Indicates default site, default sites cannot be removed.</small>
                     </div>
                 </div>
             </div>

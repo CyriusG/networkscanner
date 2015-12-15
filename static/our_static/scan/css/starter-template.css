@@ -1,7 +1,7 @@
 /*Global*/
 body {
-  padding-top: 50px;
-  background-color: #E8E8E8;
+    padding-top: 50px;
+    background-color: #E8E8E8;
 }
 
 a {
@@ -27,10 +27,52 @@ a {
 	color: red;
 }
 
+.fa-globe {
+    color: #000000;
+}
+
+.fa-globe-link:hover {
+    color: #5CB85C;
+}
+
+
+.fa-globe-nolink {
+    cursor: default;
+}
+
 .fa-globe-color {
 	color: #5CB85C;
-	cursor: default;
 }
+
+.fa-globe-color:hover {
+    cursor: default;
+}
+
+.fa-pencil {
+    color: #000000;
+}
+
+.fa-pencil:hover {
+    color: #F2E200;
+
+}
+
+.fa-floppy-o {
+    color: #000000;
+}
+
+.fa-floppy-o:hover {
+    color: #286090;
+}
+
+.fa-undo {
+    color: #000000;
+}
+
+.fa-undo:hover {
+    color: #F2E200;
+}
+
 
 /*Align classes*/
 
@@ -46,9 +88,10 @@ a {
 	text-align: right;
 }
 
+/*Smaller input group*/
 .input-group-xs {
-	height: 24px;
-	font-size: 12px;
+	height: 18px;
+    padding: 1px;
 }
 
 /*Links*/
@@ -86,12 +129,18 @@ ul.nav-edit li.active {
 	background-color: #555555;
 }
 
+/*Content margins and padding*/
+
 .content {
   padding: 10px 15px 0 15px;
   background-color: #FFFFFF;
   border-radius: 0 0 5px 5px;
   margin-bottom: 50px;
 }
+
+/*Modals*/
+
+/*Add network modal*/
 
 .add-network-address {
 	width: 150px !important;
@@ -101,6 +150,32 @@ ul.nav-edit li.active {
 	width: 70px !important;
 	border-radius-left: 0 !important; 
 }
+
+/*Add site*/
+
+#add-site-error {
+	display: none;
+}
+
+#add-network-error {
+	display: none;
+}
+
+/*Manage site*/
+
+.manage-site-name {
+    display: none;
+}
+
+.manage-site-save {
+    display: none;
+}
+
+.manage-site-delete {
+    display: none;
+}
+
+/*Results table*/
 
 .no-height{
 	padding: 0 !important;
@@ -128,12 +203,4 @@ ul.nav-edit li.active {
 
 .table-no-background {
 	background: 0 !important;
-}
-
-#add-site-error {
-	display: none;
-}
-
-#add-network-error {
-	display: none;
 }
