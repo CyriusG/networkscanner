@@ -204,3 +204,8 @@ ul.nav-edit li.active {
 .table-no-background {
 	background: 0 !important;
 }
+
+.message {
+	padding-bottom: 20px
+
+}
