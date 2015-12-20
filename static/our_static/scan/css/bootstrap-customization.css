@@ -2,7 +2,7 @@
 body {
     padding-top: 50px;
     background-color: #202328;
-	color: #FFFFFF
+	color: #EEEEEE
 }
 
 a {
@@ -20,11 +20,15 @@ a {
 	color: white;
 }
 
-.fa-times-color {
-	color: white;
+.fa-times:hover {
+	color: red;
 }
 
-.fa-times-color:hover {
+.fa-times-inverted {
+	color: black;
+}
+
+.fa-times-inverted:hover {
 	color: red;
 }
 
@@ -115,51 +119,6 @@ ul.nav-edit li.active {
 	width: 88%;
 }
 
-/*Labels*/
-
-.label:hover {
-	cursor: default;
-}
-
-.label-default {
-	background-color: #666666;
-}
-
-.label-success {
-	background-color: #508542;
-}
-
-.label-warning {
-	background-color: #D48D2A;
-}
-
-/*Buttons*/
-
-.btn-primary {
-	background-color: #24425C;
-	border-color: #2C5070;
-}
-
-.btn-primary:hover {
-    background-color: #1D354A;
-    border-color: #213C54;
-}
-
-.dropdown-toggle.btn-primary:focus, .open > .dropdown-toggle.btn-primary:hover {
-    background-color: #24425C;
-    border-color: #2A4D6B;
-}
-
-.btn-success {
-	background-color: #508542;
-	border-color: #569945;
-}
-
-.btn-success:hover {
-	background-color: #447038;
-	border-color: #4C8A3D;
-}
-
 /*Content margins and padding*/
 
 .content {
@@ -171,17 +130,6 @@ ul.nav-edit li.active {
 	border: 1px solid #1C1E21;
 }
 
-/*Nav*/
-
-.navbar-inverse {
-	background-color: #202328;
-	border-color: #1C1E21;
-}
-
-.navbar-inverse .navbar-nav > .active > a {
-    background-color: #1D1F23;
-}
-
 /*Tables*/
 
 .table .table {
@@ -189,7 +137,7 @@ ul.nav-edit li.active {
 }
 
 .table > thead > tr > th {
-	border-bottom: 2px solid #424649;
+	border-bottom: 2px solid #1C1E21;
 }
 
 .table > tbody > tr > td {
@@ -245,6 +193,10 @@ ul.nav-edit li.active {
 
 /*Modals*/
 
+.modal-content {
+	color: #111111;
+}
+
 /*Add network modal*/
 
 .add-network-address {
@@ -256,7 +208,7 @@ ul.nav-edit li.active {
 	border-radius-left: 0 !important; 
 }
 
-/*Add site*/
+/*Manage site*/
 
 #add-site-error {
 	display: none;
@@ -265,8 +217,6 @@ ul.nav-edit li.active {
 #add-network-error {
 	display: none;
 }
-
-/*Manage site*/
 
 .manage-site-name {
     display: none;
@@ -278,4 +228,16 @@ ul.nav-edit li.active {
 
 .manage-site-delete {
     display: none;
+}
+
+.table-striped-manage > tbody > tr:nth-of-type(2n+1) {
+    background-color: #F9F9F9;
+}
+
+.table-manage > thead > tr > th {
+	border-bottom: 2px solid #DDDDDD;
+}
+
+.table-manage > tbody > tr > td {
+	border-color: #DDDDDD
 }
