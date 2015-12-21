@@ -191,7 +191,7 @@ python manage.py createsuperuser
 
 ### Configure the Celery worker
 
-Paste the following code into /usr/lib/systemd/system/celery.service, make sure to change {working directory} to the root directory of the application.
+Paste the following code into /usr/lib/systemd/system/celery.service, make sure to change {working directory} to the root directory of the application. Make sure that you also create the /var/run/celery and /var/log/celery directories, otherwise the worker will not start.
 
 ```systemd
 [Unit]
