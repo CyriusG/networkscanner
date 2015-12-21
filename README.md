@@ -6,11 +6,11 @@ Networkscanner project.
 
 ### Software requirements
 
-* Python (2.7)
+* Python
 * Django, Celery, BeautifulSoup and Django Crispy Forms Python modules
 * A web server (instructions for Apache included here)
 * A database server (instructions for MySQL/MariaDB included)
-* RabbitMQ (used for Celery)
+* RabbitMQ
 
 ### Installation
 
@@ -129,7 +129,7 @@ Create the database and add a user to it, don't forget to change {username} and 
 
 ```sql
 CREATE DATABASE networkscanner;
-GRANT ALL ON networkscanner.* TO {username}r@localhost IDENTIFIED BY '{password}';
+GRANT ALL ON networkscanner.* TO {username}@localhost IDENTIFIED BY '{password}';
 ```
 
 ### Download the application
