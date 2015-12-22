@@ -4,7 +4,6 @@
 {% include 'scan/basefiles/base_head.html' %}
 
   <body>
-        {% include 'scan/modals/add_site.html' %}
         {% include 'scan/modals/manage_site.html' %}
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
@@ -49,7 +48,7 @@
 
                     <div class="btn-toolbar">
                         <div class="btn-group pull-right">
-                            <p class="navbar-text">{{ request.user.username }} | <a class="navbar-link" href="/accounts/logout"><i class="fa fa-sign-out"></i> Sign out</a></p>
+                            <p class="navbar-text">{{ request.user.username }} | <a class="navbar-link navbar-link-sign-out" href="/accounts/logout">Sign out</a></p>
                         </div>
                     </div>
                 </div>

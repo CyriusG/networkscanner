@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
@@ -301,7 +301,7 @@ def addnetwork(request):
         network_address = request.POST['network_address']
         subnet_bits = request.POST['subnet_bits']
         site = request.user.siteuser.current_site
-        network = Network(site=site, network_address=network_address, subnet_bits=subnet_bits)
+        network = Network.objects.get_or_create(site=site, network_address=network_address, subnet_bits=subnet_bits)
         network.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -345,18 +345,21 @@ def removenetwork(request):
 @login_required
 def checknetwork(request):
 
-    network_exist = False
+    if request.is_ajax():
+        network_exist = False
 
-    if request.method == 'GET':
-        network_address = request.GET['network']
-        subnet_bits = request.GET['subnet']
-        try:
-            Network.objects.get(site=request.user.siteuser.current_site, network_address=network_address, subnet_bits=subnet_bits)
-            network_exist = "True"
-        except Network.DoesNotExist:
-            network_exist = "False"
+        if request.method == 'GET':
+            network_address = request.GET['network']
+            subnet_bits = request.GET['subnet']
+            try:
+                Network.objects.get(site=request.user.siteuser.current_site, network_address=network_address, subnet_bits=subnet_bits)
+                network_exist = "True"
+            except Network.DoesNotExist:
+                network_exist = "False"
 
-    return HttpResponse(network_exist)
+        return HttpResponse(network_exist)
+    else:
+        return redirect('scan:index')
 
 
 @login_required
@@ -439,14 +442,11 @@ def results(request):
 def addsite(request):
     if request.method == 'POST':
         site_name = request.POST['site_name']
-        site = Site(name=site_name, default=False)
+        site = Site.objects.get_or_create(name=site_name, default=False)
         site.save()
-        try:
-            Siteuser.objects.get(user=request.user)
-        except Siteuser.DoesNotExist:
-            site = Site.objects.get(name=site_name)
-            site_user = Siteuser(user=request.user, current_site=site)
-            site_user.save()
+        current_user = request.user.siteuser
+        current_user.current_site = site
+        current_user.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -493,17 +493,20 @@ def defaultsite(request):
 @login_required
 def checksite(request):
 
-    site_exist = False
+    if request.is_ajax():
+        site_exist = False
 
-    if request.method == 'GET':
-        site = request.GET['site_name']
-        try:
-            Site.objects.get(name=site)
-            site_exist = "True"
-        except Site.DoesNotExist:
-            site_exist = "False"
+        if request.method == 'GET':
+            site = request.GET['site_name']
+            try:
+                Site.objects.get(name=site)
+                site_exist = "True"
+            except Site.DoesNotExist:
+                site_exist = "False"
 
-    return HttpResponse(site_exist)
+        return HttpResponse(site_exist)
+    else:
+        return redirect('scan:index')
 
 @login_required
 def updatesite(request, site):

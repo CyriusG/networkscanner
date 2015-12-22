@@ -10,6 +10,14 @@ a {
 	outline: none !important;
 }
 
+p > a, p > a:visited {
+	color: #508542;
+}
+
+p > a:hover {
+	color: #63A352;
+}
+
 /*Font Awesome*/
 
 .fa-check {
@@ -21,7 +29,7 @@ a {
 }
 
 .fa-times:hover {
-	color: red;
+	color: #be1b00;
 }
 
 .fa-times-inverted {
@@ -29,7 +37,7 @@ a {
 }
 
 .fa-times-inverted:hover {
-	color: red;
+	color: #be1b00;
 }
 
 .fa-globe {
@@ -129,6 +137,17 @@ ul.nav-edit li.active {
 	margin-top: 20px;
 	border: 1px solid #1C1E21;
 }
+
+/*Navbar sign out*/
+
+.navbar-link-sign-out {
+	color: #e2e2e2 !important;
+}
+
+.navbar-link-sign-out:hover {
+	color: #ffffff !important;
+}
+
 
 /*Tables*/
 

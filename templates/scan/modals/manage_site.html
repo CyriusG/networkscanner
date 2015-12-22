@@ -13,7 +13,7 @@
                         <div class="form-group" id="add-site-form-group">
                             <form method="POST" action="{% url 'scan:addsite' %}" class="form form-inline" id="add-site-form">
                                 {% csrf_token %}
-                                <input type="text" class="form-control" id="add-site-input" placeholder="Name" maxlength="15" required autofocus name="site_name">
+                                <input type="text" class="form-control" id="add-site-input" placeholder="Name" maxlength="20" required autofocus name="site_name">
                                 <button type="submit" class="btn btn-success btn-sm" name="add_site"><i class="fa fa-plus"></i> Add site</button>
                             </form>
                         </div>
@@ -21,7 +21,6 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-
                         <table class="table table-manage table-striped table-striped-manage">
                             <thead>
                                 <tr>

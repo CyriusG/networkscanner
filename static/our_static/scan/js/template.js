@@ -94,7 +94,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#add-site-form").submit(function(e) {
+    $('#add-site-form').submit(function(e) {
         e.preventDefault();
 
         var site;
@@ -104,7 +104,7 @@ $(document).ready(function () {
             if (data == "False") {
                 $('#add-site-form-group').animate().removeClass('has-error');
                 $('#add-site-error').slideUp();
-                $("#add-site-form").unbind('submit').submit();
+                $('#add-site-form').unbind('submit').submit();
             } else {
                 $('#add-site-form-group').animate().addClass('has-error');
                 $('#add-site-error').slideDown();
