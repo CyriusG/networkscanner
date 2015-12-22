@@ -19,7 +19,7 @@ Most Linux distributions comes with Python and Python pip installed, if not, fol
 Install the required Python modules:
   
 ```
-pip install django celery beautifulsoup djang-crispy-forms
+pip install django celery beautifulsoup django-crispy-forms
 ```
 
 Installing the servers that is required for the application. Both CentOS 7 and Debian instructions will be shown.
