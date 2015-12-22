@@ -2,7 +2,8 @@
 body {
     padding-top: 50px;
     background-color: #202328;
-	color: #EEEEEE
+	color: #EEEEEE;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 a {
@@ -138,7 +139,15 @@ ul.nav-edit li.active {
 	border: 1px solid #1C1E21;
 }
 
-/*Navbar sign out*/
+/*Navbar*/
+
+.navbar-inverse .navbar-brand, .navbar-inverse  .navbar-brand:active {
+	color: #202328 !important;
+}
+
+.navbar-inverse .navbar-brand:hover {
+	color: #272B30 !important;
+}
 
 .navbar-link-sign-out {
 	color: #e2e2e2 !important;
