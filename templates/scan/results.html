@@ -28,9 +28,9 @@
                                                         <th class="col-xs-3">Hostname</th>
                                                         <th class="col-xs-1">Services</th>
                                                         <th class="col-xs-5">Added</th>
-                                                        <th class="left-align">
+                                                        <th class="right-align">
                                                             {% if task_status == "False" %}
-                                                                <a class="btn btn-primary btn-xs disabled" href="" role="button"><i class="fa fa-search"></i> Discover OS</a>
+                                                                <span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> Discovering OS</span>
                                                             {% else %}
                                                                 <a class="btn btn-primary btn-xs" href="{% url 'scan:discoveros' result.0.id %}" role="button"><i class="fa fa-search"></i> Discover OS</a>
                                                             {% endif %}
@@ -59,7 +59,7 @@
                                                                 <td>{{ host.0.dnsName }}</td>
                                                                 <td>{{ host.2 }}</td>
                                                                 <td>{{ host.0.timestamp|date:"Y-m-d H:i:s" }}</td>
-                                                                <td class="left-align">
+                                                                <td class="right-align">
                                                                     {% if host.0.os == "notfound" %}
                                                                         <span class="label label-warning"><i class="fa fa-times"></i> Not found</span>
                                                                     {% elif host.0.os != "unknown" %}

@@ -12,8 +12,8 @@
                     <a href="#" id="scan-network-submit"><button type="submit" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="This might take a few minutes."><i class="fa fa-search"></i>Scan selected networks</button></a>
                     <a href="#" data-toggle="modal" data-target="#add-network"><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button></a>
                 {% else %}
-                    <a href="#"><button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i>Scan selected networks</button></a>
-                    <a href=""><button class="btn btn-success btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-plus"></i> Add network</button></a>
+                    <button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i>Scan selected networks</button>
+                    <button class="btn btn-success btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-plus"></i> Add network</button>
                 {% endif %}
                 <form method="POST" action="{% url 'scan:scannetwork' %}" class="form form-inline" id="scan-network-form">
                     {% csrf_token %}

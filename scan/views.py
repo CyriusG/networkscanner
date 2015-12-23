@@ -293,7 +293,7 @@ def discoveros(request, network_id):
         query.save()
 
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return redirect('scan:results')
 
 @login_required
 def addnetwork(request):
@@ -301,10 +301,9 @@ def addnetwork(request):
         network_address = request.POST['network_address']
         subnet_bits = request.POST['subnet_bits']
         site = request.user.siteuser.current_site
-        network = Network.objects.get_or_create(site=site, network_address=network_address, subnet_bits=subnet_bits)
-        network.save()
+        Network.objects.get_or_create(site=site, network_address=network_address, subnet_bits=subnet_bits)
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return redirect('scan:scan')
 
 @login_required
 def removenetwork(request):
@@ -340,7 +339,7 @@ def removenetwork(request):
                 scan.networks = str(new_networks)
                 scan.save()
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return redirect('scan:scan')
 
 @login_required
 def checknetwork(request):
@@ -443,10 +442,10 @@ def addsite(request):
     if request.method == 'POST':
         site_name = request.POST['site_name']
         site = Site.objects.get_or_create(name=site_name, default=False)
-        site.save()
-        current_user = request.user.siteuser
-        current_user.current_site = site
-        current_user.save()
+        if site[1]:
+            current_user = request.user.siteuser
+            current_user.current_site = site[0]
+            current_user.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
