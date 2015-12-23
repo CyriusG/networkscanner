@@ -56,7 +56,11 @@
                                                     <i class="fa fa-globe fa-globe-color fa-fw"></i>
                                                 {% endif %}
                                                 {% if site.default == 'False' %}
-                                                    <a href="#" class="site-delete" site-id="{{ site.id }}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times fa-times-inverted fa-fw"></i></a>
+                                                    {% if latest_scan.site != site %}
+                                                        <a href="#" class="site-delete" site-id="{{ site.id }}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times fa-times-inverted fa-fw"></i></a>
+                                                    {% elif latest_scan.site == site and latest_scan.site.ready == 'True' %}
+                                                        <a href="#" class="site-delete" site-id="{{ site.id }}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times fa-times-inverted fa-fw"></i></a>
+                                                    {% endif %}
                                                 {% endif %}
                                             </span>
                                             <span class="manage-site-save">
@@ -85,7 +89,7 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <small><i class="fa fa-globe fa-globe-color fa-fw"></i> Indicates default site, default sites cannot be removed.</small>
+                        <small><i class="fa fa-globe fa-globe-color fa-fw"></i> Indicates default site, default sites and sites with scans in progress cannot be removed.</small>
                     </div>
                 </div>
             </div>

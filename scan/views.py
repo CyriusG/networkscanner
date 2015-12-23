@@ -34,12 +34,12 @@ def index(request):
     # Then list the latest scan for the site being used
     try:
         latest_scan = Scan.objects.latest('id')
-        if latest_scan:
-            task_status = AsyncResult(latest_scan.taskID).ready()
+    except Scan.DoesNotExist:
+            pass
     # If no scan exist for the site try to list site user and site name instead.
     # If these are not present either, list nothing
     except Scan.DoesNotExist:
-        task_status = True
+        pass
 
     # Now list the 10 latest networks that were previously scanned
     # If there are no networks available, list nothing
@@ -127,7 +127,7 @@ def index(request):
         'hosts_list': hosts_list,
         'scans_list': scans_list,
         'sites': sites,
-        'task_status': task_status,
+        'latest_scan': latest_scan,
     })
     # The result of this will be found in the overview tab of the web application
     return render(request, 'scan/overview.html', context)
@@ -151,11 +151,17 @@ def scan(request):
         current_site = default_site
 
     # Load the latest scans if there are any available
+    latest_scan_networks = []
     try:
         latest_scan = Scan.objects.latest('id')
-        task_status = latest_scan.ready
+        latest_scan_networks_string = latest_scan.networks.split(',')
+
+        for network in latest_scan_networks_string:
+            latest_scan_networks.append(int(network))
+
     except Scan.DoesNotExist:
-        task_status = True
+        pass
+
     # Load this for the current site
     try:
         sites = Site.objects.order_by('id')
@@ -217,7 +223,8 @@ def scan(request):
         'sites': sites,
         'networks_list': networks_list,
         'scans_list': scans_list,
-        'task_status': task_status,
+        'latest_scan': latest_scan,
+        'latest_scan_networks': latest_scan_networks,
     })
     # This will be applied in the scan tab of the web application
     return render(request, 'scan/scan.html', context)
@@ -310,34 +317,46 @@ def removenetwork(request):
     if request.method == 'POST':
         network_id = request.POST['network_id']
 
+        latest_scan_networks = []
         try:
-            networks = Network.objects.get(id=network_id)
-            networks.delete()
-        except Network.DoesNotExist:
+            latest_scan = Scan.objects.latest('id')
+            latest_scan_networks_string = latest_scan.networks.split(',')
+
+            for network in latest_scan_networks_string:
+                latest_scan_networks.append(int(network))
+
+        except Scan.DoesNotExist:
             pass
 
-        try:
-            hosts = Host.objects.filter(network=network_id)
-            for host in hosts:
-                host.delete()
-        except Host.DoesNotExist:
-            pass
+        if network_id in latest_scan_networks and latest_scan.ready:
+            try:
+                networks = Network.objects.get(id=network_id)
+                networks.delete()
+            except Network.DoesNotExist:
+                pass
 
-        scans = Scan.objects.filter(networks__contains=network_id)
+            try:
+                hosts = Host.objects.filter(network=network_id)
+                for host in hosts:
+                    host.delete()
+            except Host.DoesNotExist:
+                pass
 
-        for scan in scans:
-            networks = scan.networks.split(',')
+            scans = Scan.objects.filter(networks__contains=network_id)
 
-            if len(networks) == 1:
-                scan.delete()
-            else:
-                new_networks = []
-                for network in networks:
-                    if network != network_id:
-                        new_networks.append(str(network))
-                new_networks = ','.join(network_join for network_join in new_networks)
-                scan.networks = str(new_networks)
-                scan.save()
+            for scan in scans:
+                networks = scan.networks.split(',')
+
+                if len(networks) == 1:
+                    scan.delete()
+                else:
+                    new_networks = []
+                    for network in networks:
+                        if network != network_id:
+                            new_networks.append(str(network))
+                    new_networks = ','.join(network_join for network_join in new_networks)
+                    scan.networks = str(new_networks)
+                    scan.save()
 
     return redirect('scan:scan')
 
@@ -367,9 +386,8 @@ def results(request):
     # Load the latest scans if there are any available
     try:
         latest_scan = Scan.objects.latest('id')
-        task_status = latest_scan.ready
     except Scan.DoesNotExist:
-        task_status = True
+        latest_scan = None
 
     try:
         site_user = Siteuser.objects.get(user=request.user)
@@ -430,7 +448,7 @@ def results(request):
         results = None
 
     context = RequestContext(request, {
-        'task_status': task_status,
+        'latest_scan': latest_scan,
         'sites': sites,
         'results': results,
     })
@@ -455,18 +473,24 @@ def deletesite(request):
         site_id = request.POST['site-delete-id']
 
         try:
-            site = Site.objects.get(id=site_id)
-
-            if site.default == "False":
-
-                if site.id == request.user.siteuser.current_site.id:
-                    default_site = Site.objects.get(default=True)
-                    request.user.siteuser.current_site = default_site
-
-                site.delete()
-
-        except Site.DoesNotExist:
+            latest_scan = Scan.objects.latest('id')
+        except Scan.DoesNotExist:
             pass
+
+        if latest_scan.site.id != site_id:
+            try:
+                site = Site.objects.get(id=site_id)
+
+                if site.default == "False":
+
+                    if site.id == request.user.siteuser.current_site.id:
+                        default_site = Site.objects.get(default=True)
+                        request.user.siteuser.current_site = default_site
+
+                    site.delete()
+
+            except Site.DoesNotExist:
+                pass
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

@@ -29,7 +29,7 @@
                                                         <th class="col-xs-1">Services</th>
                                                         <th class="col-xs-5">Added</th>
                                                         <th class="right-align">
-                                                            {% if task_status == "False" %}
+                                                            {% if latest_scan.ready == "False" %}
                                                                 <span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> Discovering OS</span>
                                                             {% else %}
                                                                 <a class="btn btn-primary btn-xs" href="{% url 'scan:discoveros' result.0.id %}" role="button"><i class="fa fa-search"></i> Discover OS</a>

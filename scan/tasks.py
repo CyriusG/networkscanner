@@ -80,11 +80,7 @@ def scanNetwork(self, networks, site, discover_host):
                                 query = Service(host=host, portID=services[j][0], protocol=services[j][1], state=services[j][2], serviceName=services[j][3])
                                 query.save()
 
-    try:
-        current_scan = Scan.objects.get(taskID=self.request.id)
-        current_scan.ready = True
-        current_scan.save()
-    except Scan.DoesNotExist:
-        pass
-
+    current_scan = Scan.objects.get(taskID=self.request.id)
+    current_scan.ready = True
+    current_scan.save()
     return('Done')

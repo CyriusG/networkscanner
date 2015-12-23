@@ -46,7 +46,7 @@ class Scan(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     def __unicode__(self):
-        return self.site.name + ", " + self.taskID + ", " + str(self.ready) + ", " + str(self.host_discovery)
+        return self.site.name + ", " + self.taskID
 
 # Points at what site the host belongs to, what IP it has, what network as a single integer field, its hostname
 # and a timestamp to indicate when it was added.

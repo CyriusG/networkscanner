@@ -12,11 +12,11 @@ a {
 }
 
 p > a, p > a:visited {
-	color: #508542;
+	color: #607D8B;
 }
 
 p > a:hover {
-	color: #63A352;
+	color: #546E7A;
 }
 
 /*Font Awesome*/

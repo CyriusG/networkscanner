@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <h4>Networks</h4>
-                {% if task_status != "False" %}
+                {% if latest_scan.ready != "False" %}
                     <a href="#" id="scan-network-submit"><button type="submit" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="This might take a few minutes."><i class="fa fa-search"></i>Scan selected networks</button></a>
                     <a href="#" data-toggle="modal" data-target="#add-network"><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button></a>
                 {% else %}
@@ -39,7 +39,11 @@
                                         <td class="left-align">{{ network.1 }}</td>
                                         <td class="left-align">{{ network.0.timestamp|date:"Y-m-d H:i:s" }}</td>
                                         <td class="left-align">
-                                             <a href="#" class="remove-network-link" remove-network-id="{{ network.0.id }}" remove-network="{{ network.0.network_address }}/{{ network.0.subnet_bits }}"><i class="fa fa-times"></i></a>
+                                            {% if network.0.id not in latest_scan_networks %}
+                                                <a href="#" class="remove-network-link" remove-network-id="{{ network.0.id }}" remove-network="{{ network.0.network_address }}/{{ network.0.subnet_bits }}"><i class="fa fa-times"></i></a>
+                                            {% elif network.0.id in latest_scan_networks and latest_scan.ready == 'True' %}
+                                                <a href="#" class="remove-network-link" remove-network-id="{{ network.0.id }}" remove-network="{{ network.0.network_address }}/{{ network.0.subnet_bits }}"><i class="fa fa-times"></i></a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
