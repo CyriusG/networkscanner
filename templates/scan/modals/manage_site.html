@@ -57,9 +57,9 @@
                                                 {% endif %}
                                                 {% if site.default == 'False' %}
                                                     {% if latest_scan.site != site %}
-                                                        <a href="#" class="site-delete" site-id="{{ site.id }}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times fa-times-inverted fa-fw"></i></a>
-                                                    {% elif latest_scan.site == site and latest_scan.site.ready == 'True' %}
-                                                        <a href="#" class="site-delete" site-id="{{ site.id }}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times fa-times-inverted fa-fw"></i></a>
+                                                        <a href="#" class="site-delete" site-id="{{ site.id }}" site-name="{{ site.name }}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times fa-times-inverted fa-fw"></i></a>
+                                                    {% elif latest_scan.site == site and latest_scan.ready == 'True' %}
+                                                        <a href="#" class="site-delete" site-id="{{ site.id }}" site-name="{{ site.name }}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times fa-times-inverted fa-fw"></i></a>
                                                     {% endif %}
                                                 {% endif %}
                                             </span>

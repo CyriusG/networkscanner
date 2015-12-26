@@ -19,7 +19,15 @@ p > a:hover {
 	color: #546E7A;
 }
 
+.label:hover {
+	cursor: default;
+}
+
 /*Font Awesome*/
+
+td > .fa:hover {
+	cursor: default;
+}
 
 .fa-check {
 	color: white;
@@ -29,7 +37,7 @@ p > a:hover {
 	color: white;
 }
 
-.fa-times:hover {
+td > a > .fa-times:hover {
 	color: #be1b00;
 }
 

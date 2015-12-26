@@ -181,23 +181,18 @@ $(document).ready(function () {
     $('.site-delete').click(function(e) {
         e.preventDefault();
 
-        //Get parent table row
-        var parent_row = $(this).closest('tr');
+        $('#site-to-remove').html($(this).attr('site-name'));
+        $('#site_id').val($(this).attr('site-id'))
 
-        //Hide site name span and fadein input box span
-        parent_row.find('.manage-site-actions').hide();
-        parent_row.find('.manage-site-delete').fadeIn();
+        $('#manage-site').modal('toggle');
+        $('#remove-site').modal('toggle');
     });
 
-    $('.site-delete-cancel').click(function(e) {
+    $('.close-remove-site').click(function(e) {
         e.preventDefault();
 
-        //Get parent table row
-        var parent_row = $(this).closest('tr');
-
-        //Hide site name span and fadein input box span
-        parent_row.find('.manage-site-delete').hide();
-        parent_row.find('.manage-site-actions').fadeIn();
+        $('#remove-site').modal('toggle');
+        $('#manage-site').modal('toggle');
     });
 
     $('.site-delete-delete').click(function (e) {
