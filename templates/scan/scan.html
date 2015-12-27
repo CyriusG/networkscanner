@@ -7,16 +7,26 @@
     <div class="networks">
         <div class="row">
             <div class="col-xs-12">
+
+
+
                 <h4>Networks</h4>
                 {% if latest_scan.ready != "False" %}
-                    <a href="#" id="scan-network-submit"><button type="submit" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="This might take a few minutes."><i class="fa fa-search"></i>Scan selected networks</button></a>
                     <a href="#" data-toggle="modal" data-target="#add-network"><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add network</button></a>
+                    <a href="#" id="scan-network-submit"><button type="submit" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="This might take a few minutes."><i class="fa fa-search"></i> Scan selected networks</button></a>
+                    <div class="checkbox-inline" data-toggle="tooltip" data-placement="top" title="This will make the scan slower.">
+                        <label>
+                            <input id="discover-os" type="checkbox" name="discover-os" />
+                            Discover host OS
+                        </label>
+                    </div>
                 {% else %}
-                    <button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i>Scan selected networks</button>
                     <button class="btn btn-success btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-plus"></i> Add network</button>
+                    <button type="submit" class="btn btn-primary btn-xs disabled" data-toggle="tooltip" data-placement="top" title="A scan is already in progress."><i class="fa fa-search"></i> Scan selected networks</button>
                 {% endif %}
                 <form method="POST" action="{% url 'scan:scannetwork' %}" class="form form-inline" id="scan-network-form">
                     {% csrf_token %}
+                    <input type="hidden" id="discover-os-hidden" name="discover-os-hidden" value="False" />
                     <table class="table table-striped table-condensed">
                         <thead>
                             <tr>
@@ -80,13 +90,9 @@
                             {% for scan in scans_list %}
                                 <tr>
                                     <td class="left-align">
-                                        {% if scan.0.host_discovery == "False" %}
-                                            {% for network in scan.1 %}
-                                                <span class="label label-default">{{ network.network_address }}/{{ network.subnet_bits }}</span>
-                                            {% endfor %}
-                                        {% else %}
-                                            <span class="label label-default">OS discovery: {{scan.1.network_address }}/{{ scan.1.subnet_bits }}</span>
-                                        {% endif %}
+                                        {% for network in scan.1 %}
+                                            <span class="label label-default">{{ network.network_address }}/{{ network.subnet_bits }}</span>
+                                        {% endfor %}
                                     </td>
                                     <td class="left-align">{{ scan.0.timestamp|date:"Y-m-d H:i:s"  }}</td>
                                     <td class="left-align">

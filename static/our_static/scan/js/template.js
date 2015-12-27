@@ -55,6 +55,12 @@ $(document).ready(function () {
         e.preventDefault();
         var warning = false;
 
+        if ($('#discover-os').is(':checked')) {
+            $('#discover-os-hidden').val('True');
+        } else {
+            $('#discover-os-hidden').val('False');
+        }
+
         $('.check-network').each(function() {
             if ($(this).is(":checked")) {
                 if($(this).attr('num-hosts') != '0'){

@@ -200,21 +200,12 @@ def scan(request):
         for scan in scans:
             scan_list = [scan]
 
-            if scan.host_discovery == "True":
-                try:
-                    network = Network.objects.get(id=scan.networks)
-                    scan_list.append(network)
-                    scan_list.append(True)
-                except Network.DoesNotExist:
-                    pass
-
-            elif scan.host_discovery == "False":
-                try:
-                    networks_id = scan.networks.split(',')
-                    networks = Network.objects.order_by('-id').filter(id__in=networks_id)
-                    scan_list.append(networks)
-                except Network.DoesNotExist:
-                    pass
+            try:
+                networks_id = scan.networks.split(',')
+                networks = Network.objects.order_by('-id').filter(id__in=networks_id)
+                scan_list.append(networks)
+            except Network.DoesNotExist:
+                pass
 
             scans_list.append(scan_list)
 
@@ -264,8 +255,13 @@ def scannetwork(request):
                         for host in hosts:
                             host.delete()
 
-                task = scanNetwork.delay(networks_id, current_site, False)
-                query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready(), host_discovery=False)
+                if request.POST['discover-os-hidden'] == 'True':
+                    task = scanNetwork.delay(networks_id, current_site, True, False)
+                    query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready(), host_discovery=True)
+                else:
+                    task = scanNetwork.delay(networks_id, current_site, True, False)
+                    query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready(), host_discovery=True)
+
                 query.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -295,7 +291,7 @@ def discoveros(request, network_id):
         latest_scan_status = True
 
     if latest_scan_status:
-        task = scanNetwork.delay(network_id, current_site, True)
+        task = scanNetwork.delay(network_id, current_site, True, True)
         query = Scan(site=request.user.siteuser.current_site,networks=network_id, taskID=task.id, ready=task.ready(), host_discovery=True)
         query.save()
 

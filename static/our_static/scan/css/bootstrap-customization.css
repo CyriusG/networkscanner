@@ -23,6 +23,12 @@ p > a:hover {
 	cursor: default;
 }
 
+/*Alerts*/
+
+.alert-info {
+	margin-bottom: 0 !important;
+}
+
 /*Font Awesome*/
 
 td > .fa:hover {

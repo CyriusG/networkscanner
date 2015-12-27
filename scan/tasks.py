@@ -7,50 +7,54 @@ from .models import Network, Host, Site, Service, Scan
 app = Celery('tasks', backend='amqp', broke='amqp://guest@localhost//')
 
 @app.task(bind=True)
-def scanNetwork(self, networks, site, discover_host):
-    if discover_host:
-            try:
-                network = Network.objects.get(id=networks)
-                network_address = network.network_address
-                subnet_bits = network.subnet_bits
-                network_nmap = network_address + "/" + subnet_bits
-            except Network.DoesNotExist:
-                network_nmap = None
+def scanNetwork(self, networks, site, discover_host, discover_host_results):
 
-            nmap_output = commands.getoutput("nmap -O -oX - %s --exclude django.ad.cyriusg.se" % network_nmap)
-            xml_soup = BeautifulSoup(nmap_output)
+    if discover_host_results:
+        try:
+            network = Network.objects.get(id=networks)
+            network_address = network.network_address
+            subnet_bits = network.subnet_bits
+            network_nmap = network_address + "/" + subnet_bits
+        except Network.DoesNotExist:
+            network_nmap = None
 
-            if xml_soup:
-                for host_xml in xml_soup.findAll("host"):
-                    if host_xml:
-                        host_xml_ip = host_xml.find("address").get("addr")
-                        host_xml_os = host_xml.findAll("osclass")
+        nmap_output = commands.getoutput("nmap -O -oX - %s --exclude django.ad.cyriusg.se" % network_nmap)
+        xml_soup = BeautifulSoup(nmap_output)
 
-                        if host_xml_os:
-                            host_xml_os_family = host_xml_os[0].get("osfamily")
-                        else:
-                            host_xml_os_family = None
+        if xml_soup:
+            for host_xml in xml_soup.findAll("host"):
+                if host_xml:
+                    host_xml_ip = host_xml.find("address").get("addr")
+                    host_xml_os = host_xml.findAll("osclass")
 
-                        host_os_family = "notfound"
+                    if host_xml_os:
+                        host_xml_os_family = host_xml_os[0].get("osfamily")
+                    else:
+                        host_xml_os_family = None
 
-                        if host_xml_os_family:
-                            host_os_family = host_xml_os_family
+                    host_os_family = "notfound"
 
-                        try:
-                            host = Host.objects.get(site=site, ip=host_xml_ip)
-                            host.os = host_os_family.lower()
-                            host.save()
-                        except Host.DoesNotExist:
-                            pass
+                    if host_xml_os_family:
+                        host_os_family = host_xml_os_family
+
+                    try:
+                        host = Host.objects.get(site=site, ip=host_xml_ip)
+                        host.os = host_os_family.lower()
+                        host.save()
+                    except Host.DoesNotExist:
+                        pass
     else:
-
         for network in networks:
             network = Network.objects.get(id=network)
             network_address = network.network_address
             subnet_bits = network.subnet_bits
             network_nmap = network_address + "/" + subnet_bits
 
-            nmap_output = commands.getoutput("nmap -oX - %s --exclude django.ad.cyriusg.se" % network_nmap)
+            if discover_host:
+                nmap_output = commands.getoutput("nmap -O -oX - %s --exclude django.ad.cyriusg.se" % network_nmap)
+            else:
+                nmap_output = commands.getoutput("nmap -oX - %s --exclude django.ad.cyriusg.se" % network_nmap)
+
             xml_soup = BeautifulSoup(nmap_output)
             if xml_soup:
                 for q in xml_soup.findAll("host"):
@@ -63,6 +67,14 @@ def scanNetwork(self, networks, site, discover_host):
                             hostname = q.hostname.get("name")
                         else:
                             hostname = " "
+                        if discover_host:
+                            q_os = q.findAll("osclass")
+                            if q_os:
+                                os = q_os[0].get("osfamily")
+                            else:
+                                os = "notfound"
+                        else:
+                            os = "unknown"
                         services = []
                         q_port = q.findAll("port")
                         if q_port:
@@ -74,7 +86,7 @@ def scanNetwork(self, networks, site, discover_host):
                                 service.append(z.find("service").get("name"))
                                 services.append(service)
                         if site and ip and network and hostname:
-                            host = Host(site=site, ip=ip, network=network.id, dnsName=hostname)
+                            host = Host(site=site, ip=ip, network=network.id, dnsName=hostname, os=os.lower())
                             host.save()
                             for j, item in enumerate(services):
                                 query = Service(host=host, portID=services[j][0], protocol=services[j][1], state=services[j][2], serviceName=services[j][3])

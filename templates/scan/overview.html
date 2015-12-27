@@ -78,13 +78,9 @@
                             {% for scan in scans_list %}
                                 <tr>
                                     <td class="left-align">
-                                        {% if scan.0.host_discovery == "False" %}
-                                            {% for network in scan.1 %}
-                                                <span class="label label-default">{{ network.network_address }}/{{ network.subnet_bits }}</span>
-                                            {% endfor %}
-                                        {% else %}
-                                            <span class="label label-default">OS discovery: {{scan.1.network_address }}/{{ scan.1.subnet_bits }}</span>
-                                        {% endif %}
+                                        {% for network in scan.1 %}
+                                            <span class="label label-default">{{ network.network_address }}/{{ network.subnet_bits }}</span>
+                                        {% endfor %}
                                     </td>
                                     <td class="left-align">{{ scan.0.timestamp|date:"Y-m-d H:i:s"  }}</td>
                                     <td class="left-align">

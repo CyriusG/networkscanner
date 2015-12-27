@@ -4,6 +4,11 @@
     <div class="networks">
         {% if results|length > 0 %}
             <div class="row">
+                {% if latest_scan.ready == 'False' %}
+                    <div class="col-xs-6 col-xs-offset-3">
+                        <div class="alert alert-block alert-info"><i class="fa fa-spinner fa-spin"></i> A scan or host discovery is currently in progress.</div>
+                    </div>
+                {% endif %}
                 <div class="col-xs-12">
                     <h4>Hosts</h4>
                     <form action="" class="form form-inline">
@@ -30,7 +35,7 @@
                                                         <th class="col-xs-5">Added</th>
                                                         <th class="right-align">
                                                             {% if latest_scan.ready == "False" %}
-                                                                <span class="label label-primary"><i class="fa fa-spinner fa-spin"></i> Discovering OS</span>
+                                                                <a class="btn btn-primary btn-xs disabled" href="{% url 'scan:discoveros' result.0.id %}" role="button"><i class="fa fa-search"></i> Discover OS</a>
                                                             {% else %}
                                                                 <a class="btn btn-primary btn-xs" href="{% url 'scan:discoveros' result.0.id %}" role="button"><i class="fa fa-search"></i> Discover OS</a>
                                                             {% endif %}
@@ -99,7 +104,7 @@
                                                     {% else %}
                                                         <tr>
                                                             <td colspan="7">
-                                                                <div class="text-center"><strong>No hosts has been discovered for this network.</strong></div>
+                                                                <div class="text-center"><strong>No hosts has been discovered on this network.</strong></div>
                                                             </td>
                                                         </tr>
                                                     {% endif %}
