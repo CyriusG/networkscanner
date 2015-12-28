@@ -44,7 +44,7 @@ td > .fa:hover {
 }
 
 td > a > .fa-times:hover {
-	color: #be1b00;
+	color: #F44336;
 }
 
 .fa-times-inverted {
@@ -52,7 +52,7 @@ td > a > .fa-times:hover {
 }
 
 .fa-times-inverted:hover {
-	color: #be1b00;
+	color: #F44336;
 }
 
 .fa-globe {
@@ -60,7 +60,7 @@ td > a > .fa-times:hover {
 }
 
 .fa-globe-link:hover {
-    color: #5CB85C;
+    color: #4AB44E;
 }
 
 
@@ -69,7 +69,7 @@ td > a > .fa-times:hover {
 }
 
 .fa-globe-color {
-	color: #5CB85C;
+	color: #4AB44E;
 }
 
 .fa-globe-color:hover {
@@ -81,7 +81,7 @@ td > a > .fa-times:hover {
 }
 
 .fa-pencil:hover {
-    color: #F2E200;
+    color: #FFC107;
 
 }
 
@@ -90,7 +90,7 @@ td > a > .fa-times:hover {
 }
 
 .fa-floppy-o:hover {
-    color: #286090;
+    color: #008ADF;
 }
 
 .fa-undo {
@@ -98,7 +98,7 @@ td > a > .fa-times:hover {
 }
 
 .fa-undo:hover {
-    color: #F2E200;
+    color: #FFC107;
 }
 
 
@@ -125,11 +125,11 @@ td > a > .fa-times:hover {
 /*Links*/
 
 .link-color {
-	color: #337AB7 !important;
+	color: #008adf !important;
 }
 
 .link-color:hover {
-	color: #286090 !important;
+	color: #006aac !important;
 	text-decoration: none;
 }
 
