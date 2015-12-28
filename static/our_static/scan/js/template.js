@@ -121,21 +121,39 @@ $(document).ready(function () {
     $('#add-network-form').submit(function(e) {
         e.preventDefault();
 
+        var valid_network = false;
+
+        var ip_regex = '^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$';
+
+        var network_address = $('#add-network-input-address').val();
+        var subnet_bits = parseInt($('#add-network-input-subnet').val(), 10);
+
+        if (network_address.match(ip_regex) && subnet_bits >= 0 && subnet_bits <= 32)  {
+            $('#add-network-form-group').animate().removeClass('has-error');
+            $('#add-network-error-invalid-network').slideUp();
+            valid_network = true;
+        } else {
+            $('#add-network-form-group').animate().addClass('has-error');
+            $('#add-network-error-invalid-network').slideDown();
+            $('#add-network-error-already-exists').slideUp();
+        }
+
         var network_address;
         var subnet_bits;
         network_address = $('#add-network-input-address').val();
         subnet_bits = $('#add-network-input-subnet').val();
-
-        $.get('/scan/checknetwork/', {network: network_address, subnet: subnet_bits}, function(data) {
-            if (data == "False") {
-                $('#add-network-form-group').animate().removeClass('has-error');
-                $('#add-network-error').slideUp();
-                $("#add-network-form").unbind('submit').submit();
-            } else {
-                $('#add-network-form-group').animate().addClass('has-error');
-                $('#add-network-error').slideDown();
-            }
-        });
+        if (valid_network) {
+            $.get('/scan/checknetwork/', {network: network_address, subnet: subnet_bits}, function(data) {
+                if (data == "False") {
+                    $('#add-network-form-group').animate().removeClass('has-error');
+                    $('#add-network-error-already-exists').slideUp();
+                    $("#add-network-form").unbind('submit').submit();
+                } else {
+                    $('#add-network-form-group').animate().addClass('has-error');
+                    $('#add-network-error-already-exists').slideDown();
+                }
+            });
+        }
     });
 
     //Manage changing of site names

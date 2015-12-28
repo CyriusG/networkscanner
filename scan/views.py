@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
-from celery.result import AsyncResult
+
+import re
 
 # Import defied models from scan/models
 
@@ -97,21 +98,12 @@ def index(request):
         for scan in scans:
             scan_list = [scan]
 
-            if scan.host_discovery == "True":
-                try:
-                    network = Network.objects.get(id=scan.networks)
-                    scan_list.append(network)
-                    scan_list.append(True)
-                except Network.DoesNotExist:
-                    pass
-
-            elif scan.host_discovery == "False":
-                try:
-                    networks_id = scan.networks.split(',')
-                    networks = Network.objects.order_by('-id').filter(id__in=networks_id)
-                    scan_list.append(networks)
-                except Network.DoesNotExist:
-                    pass
+            try:
+                networks_id = scan.networks.split(',')
+                networks = Network.objects.order_by('-id').filter(id__in=networks_id)
+                scan_list.append(networks)
+            except Network.DoesNotExist:
+                pass
 
             scans_list.append(scan_list)
 
@@ -301,10 +293,19 @@ def discoveros(request, network_id):
 @login_required
 def addnetwork(request):
     if request.method == 'POST':
+
+        ip_regex = re.compile('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$')
+
         network_address = request.POST['network_address']
         subnet_bits = request.POST['subnet_bits']
-        site = request.user.siteuser.current_site
-        Network.objects.get_or_create(site=site, network_address=network_address, subnet_bits=subnet_bits)
+
+        try:
+            subnet_bits = int(subnet_bits)
+            if ip_regex.match(network_address) and subnet_bits >= 0 and subnet_bits <= 32:
+                site = request.user.siteuser.current_site
+                Network.objects.get_or_create(site=site, network_address=network_address, subnet_bits=subnet_bits)
+        except ValueError:
+            pass
 
     return redirect('scan:scan')
 
@@ -312,47 +313,34 @@ def addnetwork(request):
 def removenetwork(request):
     if request.method == 'POST':
         network_id = request.POST['network_id']
-
-        latest_scan_networks = []
         try:
-            latest_scan = Scan.objects.latest('id')
-            latest_scan_networks_string = latest_scan.networks.split(',')
-
-            for network in latest_scan_networks_string:
-                latest_scan_networks.append(int(network))
-
-        except Scan.DoesNotExist:
+            networks = Network.objects.get(id=network_id)
+            networks.delete()
+        except Network.DoesNotExist:
             pass
 
-        if network_id in latest_scan_networks and latest_scan.ready:
-            try:
-                networks = Network.objects.get(id=network_id)
-                networks.delete()
-            except Network.DoesNotExist:
-                pass
+        try:
+            hosts = Host.objects.filter(network=network_id)
+            for host in hosts:
+                host.delete()
+        except Host.DoesNotExist:
+            pass
 
-            try:
-                hosts = Host.objects.filter(network=network_id)
-                for host in hosts:
-                    host.delete()
-            except Host.DoesNotExist:
-                pass
+        scans = Scan.objects.filter(networks__contains=network_id)
 
-            scans = Scan.objects.filter(networks__contains=network_id)
+        for scan in scans:
+            networks = scan.networks.split(',')
 
-            for scan in scans:
-                networks = scan.networks.split(',')
-
-                if len(networks) == 1:
-                    scan.delete()
-                else:
-                    new_networks = []
-                    for network in networks:
-                        if network != network_id:
-                            new_networks.append(str(network))
-                    new_networks = ','.join(network_join for network_join in new_networks)
-                    scan.networks = str(new_networks)
-                    scan.save()
+            if len(networks) == 1:
+                scan.delete()
+            else:
+                new_networks = []
+                for network in networks:
+                    if network != network_id:
+                        new_networks.append(str(network))
+                new_networks = ','.join(network_join for network_join in new_networks)
+                scan.networks = str(new_networks)
+                scan.save()
 
     return redirect('scan:scan')
 

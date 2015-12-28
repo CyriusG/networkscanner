@@ -250,26 +250,10 @@ ul.nav-edit li.active {
 	border-radius-left: 0 !important; 
 }
 
-/*Manage site*/
+/*Hidden objects.*/
 
-#add-site-error {
+#add-site-error, #add-network-error-invalid-network, #add-network-error-already-exists, .manage-site-name, .manage-site-save, .manage-site-delete {
 	display: none;
-}
-
-#add-network-error {
-	display: none;
-}
-
-.manage-site-name {
-    display: none;
-}
-
-.manage-site-save {
-    display: none;
-}
-
-.manage-site-delete {
-    display: none;
 }
 
 .table-striped-manage > tbody > tr:nth-of-type(2n+1) {
