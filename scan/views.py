@@ -239,6 +239,7 @@ def scannetwork(request):
     if latest_scan_status:
         if request.method == 'POST':
             networks_id = request.POST.getlist('scan_network_id')
+            discover_os = request.POST['discover-os-hidden']
 
             if len(networks_id) > 0:
                 for network in networks_id:
@@ -247,12 +248,12 @@ def scannetwork(request):
                         for host in hosts:
                             host.delete()
 
-                if request.POST['discover-os-hidden'] == 'True':
+                if discover_os == 'True':
                     task = scanNetwork.delay(networks_id, current_site, True, False)
                     query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready(), host_discovery=True)
                 else:
-                    task = scanNetwork.delay(networks_id, current_site, True, False)
-                    query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready(), host_discovery=True)
+                    task = scanNetwork.delay(networks_id, current_site, False, False)
+                    query = Scan(site=request.user.siteuser.current_site,networks=','.join(networks_id), taskID=task.id, ready=task.ready(), host_discovery=False)
 
                 query.save()
 
