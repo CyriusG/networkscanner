@@ -64,7 +64,6 @@ $(document).ready(function () {
         $('.check-network').each(function() {
             if ($(this).is(":checked")) {
                 if($(this).attr('num-hosts') != '0'){
-                    console.log($(this).attr('num-hosts'))
                     warning = true;
                 }
             }

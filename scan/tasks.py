@@ -9,6 +9,8 @@ app = Celery('tasks', backend='amqp', broke='amqp://guest@localhost//')
 @app.task(bind=True)
 def scanNetwork(self, networks, site, discover_host, discover_host_results):
 
+    print(discover_host)
+
     if discover_host_results:
         try:
             network = Network.objects.get(id=networks)
