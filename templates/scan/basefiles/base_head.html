@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        {% if task_status == "False" %}
+        {% if latest_scan.ready == "False" %}
             <META HTTP-EQUIV="refresh" CONTENT="10">
         {% endif %}
 
